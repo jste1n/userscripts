@@ -11,11 +11,10 @@
 // @require      https://code.jquery.com/jquery-3.5.0.min.js
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
     $.noConflict();
 
-    // var url = window.location.href;
     var style = document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = '#loaderSpinner { position: fixed; left: 50%; top: 50%; z-index: 101; width: 120px; height: 120px; margin: -76px 0 0 -76px; border: 16px solid #f3f3f3; border-radius: 50%; border-top: 16px solid #3498db; -webkit-animation: spin 2s linear infinite; animation: spin 2s linear infinite; } @-webkit-keyframes spin { 0% { -webkit-transform: rotate(0deg); } 100% { -webkit-transform: rotate(360deg); } } @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } ';
@@ -35,7 +34,8 @@
 
     async function callback(e) {
         const link = findLink(e.target);
-        if (link?.href == null || !/^https:\/\/www\.preisjaeger\.at\/visit\/thread\/\d{6}$/g.test(link.href)) { return; }
+
+        if (!(link?.href != null && /^https:\/\/www\.preisjaeger\.at\/visit\/thread(image)?\/\d{6}$/g.test(link.href))) { return; }
         console.log('checking redirects...');
 
         e.preventDefault();
@@ -51,23 +51,21 @@
         link.href = realLinkEncoded;
         jQuery('#loaderSpinner').hide();
         jQuery('#loaderBg').hide();
-        console.log('new link',link.href);
+        console.log('new link', link.href);
     };
 
     // if (document.addEventListener){
-        document.addEventListener('click', callback, false);
+    document.addEventListener('click', callback, false);
     // }else{
     //     document.attachEvent('onclick', callback);
     // }
 
-
-
-    function gettraceRoute(urlToTrace){
-        return new Promise (function (resolve, reject){
+    function gettraceRoute(urlToTrace) {
+        return new Promise(function (resolve) {
             GM_xmlhttpRequest({
                 method: "POST",
                 url: "https://httpstatus-backend-production.herokuapp.com/api",
-                data: '{"urls":["'+urlToTrace+'"],"userAgent":"browser","userName":"","passWord":"","headerName":"","headerValue":"","strictSSL":true,"canonicalDomain":false,"additionalSubdomains":["www"],"followRedirect":true,"throttleRequests":100,"escapeCharacters":false}',
+                data: '{"urls":["' + urlToTrace + '"],"userAgent":"browser","userName":"","passWord":"","headerName":"","headerValue":"","strictSSL":true,"canonicalDomain":false,"additionalSubdomains":["www"],"followRedirect":true,"throttleRequests":100,"escapeCharacters":false}',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Connection': 'keep-alive',
@@ -86,7 +84,7 @@
                     'dnt': '1',
                     'sec-gpc': '1'
                 },
-                onload: function(response) {
+                onload: function (response) {
                     resolve(response);
                 }
             })
