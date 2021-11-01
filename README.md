@@ -1,6 +1,6 @@
 # userscripts
 
-this is a collection of my personal userscripts. feel free to use and improve.
+this is a collection (and backup) of my personal userscripts. feel free to use and improve.
 
 ## availabe scripts: 
 - ikea.at see prices in nearby countries

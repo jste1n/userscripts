@@ -1,0 +1,39 @@
+{
+  "options": {
+    "check_for_updates": false,
+    "comment": null,
+    "compat_foreach": false,
+    "compat_metadata": false,
+    "compat_prototypes": false,
+    "compat_wrappedjsobject": false,
+    "compatopts_for_requires": true,
+    "noframes": null,
+    "override": {
+      "merge_connects": true,
+      "merge_excludes": true,
+      "merge_includes": true,
+      "merge_matches": true,
+      "orig_connects": [],
+      "orig_excludes": [],
+      "orig_includes": [],
+      "orig_matches": [
+        "https://www.streameast.live/f1/*",
+        "https://www.streameast.io/*"
+      ],
+      "orig_noframes": null,
+      "orig_run_at": "document-idle",
+      "use_blockers": [],
+      "use_connects": [],
+      "use_excludes": [],
+      "use_includes": [],
+      "use_matches": []
+    },
+    "run_at": null
+  },
+  "settings": { "enabled": true, "position": 4 },
+  "meta": {
+    "name": "F1 streameast",
+    "uuid": "c1f2bd1a-7cb9-4817-a721-b75318367e7a",
+    "modified": 1634922399212
+  }
+}

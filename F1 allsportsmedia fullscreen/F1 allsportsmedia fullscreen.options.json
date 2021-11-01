@@ -1,0 +1,39 @@
+{
+  "options": {
+    "check_for_updates": false,
+    "comment": null,
+    "compat_foreach": false,
+    "compat_metadata": false,
+    "compat_prototypes": false,
+    "compat_wrappedjsobject": false,
+    "compatopts_for_requires": true,
+    "noframes": null,
+    "override": {
+      "merge_connects": true,
+      "merge_excludes": true,
+      "merge_includes": true,
+      "merge_matches": true,
+      "orig_connects": [],
+      "orig_excludes": [],
+      "orig_includes": [],
+      "orig_matches": [
+        "http://allsportsmedia.live/novo/*",
+        "http://thecyclingentertainment.com/novo/*"
+      ],
+      "orig_noframes": null,
+      "orig_run_at": "document-idle",
+      "use_blockers": [],
+      "use_connects": [],
+      "use_excludes": [],
+      "use_includes": ["http://allsportsmedia.live/"],
+      "use_matches": ["http://allsportsmedia.live/"]
+    },
+    "run_at": null
+  },
+  "settings": { "enabled": true, "position": 1 },
+  "meta": {
+    "name": "F1 allsportsmedia fullscreen",
+    "uuid": "7cbdc95c-19ea-4195-bde1-074d75a97ac8",
+    "modified": 1632472862761
+  }
+}
