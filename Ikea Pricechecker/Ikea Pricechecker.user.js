@@ -22,50 +22,60 @@
 
     var url = window.location.href;
     var productID = url.match(/\w*\d{8}/g);
+    main();
 
-    if (productID) {
-        jQuery('.js-price-package, .range-revamp-pip-price-package')
-            .after('<div class="customElementIkeaPrices range-revamp-pip-price-package"' +
-                'style="font-size: 0.875rem !important; /*border-bottom: 1px solid #dfdfdf; padding:10px 0;*/"></div>');
-        jQuery('.customElementIkeaPrices').after('<div class="customElementIkeaNA range-revamp-pip-price-package" style="font-size: 0.875rem !important; padding-top:10px;"></div>');
+    async function main() {
+        if (productID) {
+            jQuery('.js-price-package, .range-revamp-pip-price-package')
+                .after('<div class="customElementIkeaPrices range-revamp-pip-price-package"' +
+                    'style="font-size: 0.875rem !important; /*border-bottom: 1px solid #dfdfdf; padding:10px 0;*/"></div>');
+            jQuery('.customElementIkeaPrices').after('<div class="customElementIkeaNA range-revamp-pip-price-package" style="font-size: 0.875rem !important; padding-top:10px;"></div>');
 
-        productID = productID.toString().toUpperCase();
+            productID = productID.toString().toUpperCase();
 
-        printPrice('Slowakei', 'SK', 'sk', productID);
-        printPrice('Italien', 'IT', 'it', productID);
-        printPrice('Slowenien', 'SI', 'sl', productID);
+            printPrice('Slowakei', 'SK', 'sk', productID);
+            printPrice('Italien', 'IT', 'it', productID);
+            printPrice('Slowenien', 'SI', 'sl', productID);
 
-        GM_xmlhttpRequest({
-            method: 'GET',
-            url: 'http://api.exchangeratesapi.io/v1/latest12?access_key='+access_key+'+&base=EUR',
-            responseType: 'json',
-            onload: function (responseDetails) {
-                if (responseDetails?.response.success) {
-                    var response = responseDetails.response;
-                    console.log('rates from ', new Date(response.timestamp * 1000).toString());
-                    getPriceInForeignCurrency(response);
-                } else {
-                    console.log('couldn\'t get new rates. using old exchange rates from:', new Date(backupResponse.timestamp * 1000).toString());
-                    getPriceInForeignCurrency(backupResponse);
-                }
+            var xrResponse = await getExchangeRates();
+            xrResponse = xrResponse.response;         
+            if (xrResponse?.success) {
+                console.log('rates from ', new Date(xrResponse.timestamp * 1000).toString());
+                getPriceInForeignCurrency(xrResponse);
+            } else {
+                console.log('couldn\'t get new rates. using old exchange rates from:', new Date(backupResponse.timestamp * 1000).toString());
+                getPriceInForeignCurrency(backupResponse);
             }
-        });
 
         setTimeout(function () {
             sortIkeas(getFancyTextPrice);
             console.log('timeout done');
         }, 1000);
 
-        jQuery('.customElementIkeaNA').after('<div style="padding: 1rem 0; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
-            '<div style="width: 50%; padding-right: 0.5rem; padding-left: 0.0rem;">' +
-            '<a id="sortByPrice" class="hnf-link hnf-btn hnf-btn-change-country" style="width:100%; padding-left: unset; padding-right: unset;">sortieren nach Preis</a>' +
-            '</div>' +
-            '<div style="width: 50%; padding-right: 0.0rem; padding-left: 0.5rem;">' +
-            '<a id="sortByCountry" class="hnf-link hnf-btn hnf-btn-change-country" style="width:100%; padding-left: unset; padding-right: unset;">sortieren nach Land</a>' +
-            '</div>' +
-            '</div>');
-        jQuery('#sortByPrice').click(function () { sortIkeas(getFancyTextPrice) });
-        jQuery('#sortByCountry').click(function () { sortIkeas(getFancyTextCountry) });
+            jQuery('.customElementIkeaNA').after('<div style="padding: 1rem 0; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
+                '<div style="width: 50%; padding-right: 0.5rem; padding-left: 0.0rem;">' +
+                '<a id="sortByPrice" class="hnf-link hnf-btn hnf-btn-change-country" style="width:100%; padding-left: unset; padding-right: unset;">sortieren nach Preis</a>' +
+                '</div>' +
+                '<div style="width: 50%; padding-right: 0.0rem; padding-left: 0.5rem;">' +
+                '<a id="sortByCountry" class="hnf-link hnf-btn hnf-btn-change-country" style="width:100%; padding-left: unset; padding-right: unset;">sortieren nach Land</a>' +
+                '</div>' +
+                '</div>');
+            jQuery('#sortByPrice').click(function () { sortIkeas(getFancyTextPrice) });
+            jQuery('#sortByCountry').click(function () { sortIkeas(getFancyTextCountry) });
+        }
+    }
+
+    function getExchangeRates() {
+        return new Promise(function (resolve) {
+            GM_xmlhttpRequest({
+                method: 'GET',
+                url: 'http://api.exchangeratesapi.io/v1/latest?access_key=' + access_key + '&base=EUR',
+                responseType: 'json',
+                onload: function (response) {
+                    resolve(response);
+                }
+            })
+        });
     }
 
     function getPriceInForeignCurrency(response) {
