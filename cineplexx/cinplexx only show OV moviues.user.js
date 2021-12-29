@@ -5,7 +5,6 @@
 // @description  only shows times that are in OV. removes all other
 // @author       JStoni
 // @match        https://www.cineplexx.at/film/*
-// @match        https://www.cineplexx.at/mobile/film/*
 // @icon         https://www.google.com/s2/favicons?domain=cineplexx.at
 // @grant        none
 // ==/UserScript==
@@ -82,15 +81,15 @@
 
     function toggleOVView() {
         if (onlyOV) {
-                // [...document.querySelectorAll(" a > p.mode-desc")].filter(e => !e.innerText.includes("OV")).forEach(x => x.parentElement.parentElement.style.visibility = "visible");
-                onlyOV = false;
-                document.querySelector("div.span12.start-times-wrapper.margin-top-10").innerHTML = timeChildrenOriginal;
-                // [...document.querySelectorAll("div.row-fluid.separator.time-row")].filter(x => x.children[1].innerText == "").forEach(x => x.remove());
-            } else {
-                // [...document.querySelectorAll(" a > p.mode-desc")].filter(e => !e.innerText.includes("OV")).forEach(x => x.parentElement.parentElement.style.visibility = "hidden");
-                onlyOV = true;
-                document.querySelector("div.span12.start-times-wrapper.margin-top-10").innerHTML = modifiedView;
-            }
+            // [...document.querySelectorAll(" a > p.mode-desc")].filter(e => !e.innerText.includes("OV")).forEach(x => x.parentElement.parentElement.style.visibility = "visible");
+            onlyOV = false;
+            document.querySelector("div.span12.start-times-wrapper.margin-top-10").innerHTML = timeChildrenOriginal;
+            // [...document.querySelectorAll("div.row-fluid.separator.time-row")].filter(x => x.children[1].innerText == "").forEach(x => x.remove());
+        } else {
+            // [...document.querySelectorAll(" a > p.mode-desc")].filter(e => !e.innerText.includes("OV")).forEach(x => x.parentElement.parentElement.style.visibility = "hidden");
+            onlyOV = true;
+            document.querySelector("div.span12.start-times-wrapper.margin-top-10").innerHTML = modifiedView;
+        }
     }
 
 })();
