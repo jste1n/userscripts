@@ -35,23 +35,35 @@
     async function callback(e) {
         const link = findLink(e.target);
 
-        if (!(link?.href != null && /^https:\/\/www\.preisjaeger\.at\/visit\/thread(image)?\/\d{6}$/g.test(link.href))) { return; }
-        console.log('checking redirects...');
+        if (!(link?.href != null && /^https:\/\/www\.preisjaeger\.at\/visit\/thread(image)?(desc)?\/\d{6}(\/\d{6})?$/g.test(link.href))) { return; }
 
-        e.preventDefault();
+        if (link.hasAttribute('title')) {
+            link.href = link.title;
+            console.log('changed link to the title of DOM element');
+        } else {
+            console.log('checking redirects...');
 
-        jQuery('#loaderSpinner').show();
-        jQuery('#loaderBg').show();
+            e.preventDefault();
 
-        var newUrl = await gettraceRoute(link.href);
-        var realLink = JSON.parse(newUrl.response)[0].redirectURLChain[1].match(/https%.*(?=&ppref)/g)[0];
-        var realLinkEncoded = decodeURIComponent(realLink.replace(/\+/g, " "));
+            jQuery('#loaderSpinner').show();
+            jQuery('#loaderBg').show();
 
-        window.open(realLinkEncoded, '_blank');
-        link.href = realLinkEncoded;
-        jQuery('#loaderSpinner').hide();
-        jQuery('#loaderBg').hide();
-        console.log('new link', link.href);
+            var newUrl = await gettraceRoute(link.href);
+            var response = JSON.parse(newUrl.response)[0];
+
+            if (response.statusCode == 'error' || response.redirectURLChain == null) {
+                window.open(link.href, '_blank');
+            } else {
+                var realLink = response.redirectURLChain[1].match(/https%.*(?=&ppref)/g)[0];
+                var realLinkEncoded = decodeURIComponent(realLink.replace(/\+/g, " "));
+
+                window.open(realLinkEncoded, '_blank');
+                link.href = realLinkEncoded;
+            }
+            jQuery('#loaderSpinner').hide();
+            jQuery('#loaderBg').hide();
+            console.log('new link', link.href);
+        }
     };
 
     // if (document.addEventListener){
