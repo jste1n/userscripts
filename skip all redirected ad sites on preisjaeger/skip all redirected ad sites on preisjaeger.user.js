@@ -54,8 +54,13 @@
             if (response.statusCode == 'error' || response.redirectURLChain == null) {
                 window.open(link.href, '_blank');
             } else {
-                var realLink = response.redirectURLChain[1].match(/https%.*(?=&ppref)/g)[0];
-                var realLinkEncoded = decodeURIComponent(realLink.replace(/\+/g, " "));
+                var realLink = response.redirectURLChain[1].match(/https%.*(?=&ppref)/g);
+                var realLinkEncoded = '';
+                if (realLink != null) {
+                    realLinkEncoded = decodeURIComponent(realLink[0].replace(/\+/g, " "));
+                } else {
+                    realLinkEncoded = response.redirectURLChain[response.redirectURLChain.length - 1]
+                }
 
                 window.open(realLinkEncoded, '_blank');
                 link.href = realLinkEncoded;
@@ -76,7 +81,7 @@
         return new Promise(function (resolve) {
             GM_xmlhttpRequest({
                 method: "POST",
-                url: "https://httpstatus-backend-production.herokuapp.com/api",
+                url: "https://httpstatus-backend-production.herokuapp.com/api", // https://httpstatus.io/
                 data: '{"urls":["' + urlToTrace + '"],"userAgent":"browser","userName":"","passWord":"","headerName":"","headerValue":"","strictSSL":true,"canonicalDomain":false,"additionalSubdomains":["www"],"followRedirect":true,"throttleRequests":100,"escapeCharacters":false}',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
