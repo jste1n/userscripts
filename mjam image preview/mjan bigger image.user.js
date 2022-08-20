@@ -16,7 +16,8 @@
 
     // var e = jQuery.Event("keydown", {key: "Control"})
     // console.log(e);
-    jQuery('body').append('<div id="loaderBg" style="display:none; position: fixed; top: 0; left: 0; z-index: 100; width:100%; height:100%; background-repeat: no-repeat; background-position: center; border: 100px solid rgba(255,255,255, 0);"></div>');
+    // img border used fo padding
+    jQuery('body').append('<div id="loaderBg" style="display:none; position: fixed; top: 0; left: 0; z-index: 100; width:100vw; height:100vh; background-color:rgba(0,0,0, 0.2)"><img src="" style="width:100%; height:100%; object-fit:contain; object-position:center; padding:7%;"/></div>');
     var keyStopper = false;
 
     // Your code here...
@@ -44,12 +45,13 @@
                 // var indexOfQuestionmark = imageUrl.indexOf("?");
                 // console.log(imageUrl.substring(5, indexOfQuestionmark));
                 imageUrl = imageUrl.replace(/\?.*"/, '"')
+                imageUrl = imageUrl.substring(5,imageUrl.length-2); // remove url(" ... ")
                 console.log(imageUrl);
                 var dialog = document.querySelector("body > div#loaderBg");
                 // console.dir(dialog);
 
-                dialog.style.backgroundImage = imageUrl;
-                dialog.style.display = "block";
+                dialog.firstChild.src = imageUrl;
+                dialog.style.display = "flex";
             }
 
             // alert(elementMouseIsOver);
