@@ -6,8 +6,9 @@
 // @author       JP Stoni
 // @match        https://www.preisjaeger.at/*
 // @icon         https://www.preisjaeger.at/favicon.ico
-// run-at document-start
+// @run-at       document-start
 // @grant        GM_xmlhttpRequest
+// @connect      backend.httpstatus.io
 // @require      https://code.jquery.com/jquery-3.5.0.min.js
 // ==/UserScript==
 
@@ -35,7 +36,7 @@
     async function callback(e) {
         const link = findLink(e.target);
 
-        if (!(link?.href != null && /^https:\/\/www\.preisjaeger\.at\/visit\/thread(image)?(desc)?\/\d{6}(\/\d{6})?$/g.test(link.href))) { return; }
+        if (!(link?.href != null && /^https:\/\/www\.preisjaeger\.at\/visit\/(thread(main|image|img|beldesc)|homehot)?(desc)?\/\d{6}(\/\d{6})?$/g.test(link.href))) { return; }
 
         if (link.hasAttribute('title')) {
             link.href = link.title;
@@ -81,7 +82,8 @@
         return new Promise(function (resolve) {
             GM_xmlhttpRequest({
                 method: "POST",
-                url: "https://httpstatus-backend-production.herokuapp.com/api", // https://httpstatus.io/
+                //url: "https://httpstatus-backend-production.herokuapp.com/api", old api link, changed on 01.12.2022
+                url: "https://backend.httpstatus.io/api", // https://httpstatus.io/
                 data: '{"urls":["' + urlToTrace + '"],"userAgent":"browser","userName":"","passWord":"","headerName":"","headerValue":"","strictSSL":true,"canonicalDomain":false,"additionalSubdomains":["www"],"followRedirect":true,"throttleRequests":100,"escapeCharacters":false}',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
