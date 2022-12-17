@@ -165,7 +165,7 @@
             //     console.log('timeout done');
             // }, 1000);
 
-            jQuery('.customElementIkeaNA').after('<div style="padding: 0 0 1rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
+            jQuery('.customElementIkeaNA').after('<div style="margin-top: 12px; padding: 0 0 1rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
                 '<div style="width: 50%; padding-right: 0.5rem; padding-left: 0.0rem;">' +
                 '<a id="sortByPrice" class="hnf-link hnf-btn hnf-btn-change-country" style="width:100%; padding-left: unset; padding-right: unset;">sortieren nach Preis</a>' +
                 '</div>' +
