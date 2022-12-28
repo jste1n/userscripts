@@ -11,11 +11,13 @@
 // add @ below if using:
 // connect      publications-ext.ikea.com
 // @require      https://code.jquery.com/jquery-3.3.1.min.js
+// @require  https://gist.github.com/raw/2625891/waitForKeyElements.js
+// @grant    GM_addStyle
 // ==/UserScript==
 
 (function () {
     'use strict';
-    $.noConflict();
+    // $.noConflict();
 
     var access_key = ''; // add your access key here
     var backupResponse = JSON.parse('{"success":true,"timestamp":1649112186,"base":"EUR","date":"2022-04-04","rates":{"CZK":24.258869,"HRK":7.549739,"HUF":406.052486}}');
@@ -70,7 +72,7 @@
     color: #484848;\
     width: auto;";
     // original class: pip-link, then pip-link-button
-    var priceCountryLink="-webkit-text-size-adjust: 100%;\
+    var priceCountryLink = "-webkit-text-size-adjust: 100%;\
     --ikea-font: 'Noto IKEA', 'Noto Sans', 'Roboto', 'Open Sans', system-ui, sans-serif !important;\
     box-sizing: inherit;\
     outline: none;\
@@ -91,7 +93,7 @@
     text-align: inherit;\
     text-decoration: underline;";
     // original class: range-revamp-pip-price-package__main-price, then pip-pip-price-package__main-price, then pip-temp-price?
-    var pricePriceGroup="-webkit-text-size-adjust: 100%;\
+    var pricePriceGroup = "-webkit-text-size-adjust: 100%;\
     font: 100% sans-serif;\
     --ikea-font: 'Noto IKEA', 'Noto Sans', 'Roboto', 'Open Sans', system-ui, sans-serif !important;\
     font-family: var(--ikea-font);\
@@ -106,7 +108,7 @@
     margin: 0;\
     padding: 0;";
     // original class: range-revamp-price, then pip-price
-    var pricePriceGroupSpan="    -webkit-text-size-adjust: 100%;\
+    var pricePriceGroupSpan = "    -webkit-text-size-adjust: 100%;\
     font: 100% sans-serif;\
     --ikea-font: 'Noto IKEA', 'Noto Sans', 'Roboto', 'Open Sans', system-ui, sans-serif !important;\
     font-family: var(--ikea-font);\
@@ -124,21 +126,26 @@
     var cssClassPreFix = 'pip'; // previously: range-revamp
     var url = window.location.href;
     var productID = url.match(/\w*\d{8}/g);
+    var favouritesList = url.match(/.*\/favourites\/.*/g);
     main();
 
     async function main() {
         if (productID) {
+            var customSelector = '.customElementIkeaPrices';
             // find title, description, price and stars
             jQuery('.js-price-package, .pip-temp-price-module')
-                .after('<div class="customElementIkeaPrices"' +
-                    'style="'+priceGroupStyle+' display:none; /*border-bottom: 1px solid #dfdfdf; padding:10px 0;*/"></div>');
-            jQuery('.customElementIkeaPrices').after('<div class="customElementIkeaNA" style="'+priceGroupStyle+' display:none;"></div>');
+                .after('<div class=' + customSelector.slice(1) +
+                    ' style="' + priceGroupStyle + ' display:none; /*border-bottom: 1px solid #dfdfdf; padding:10px 0;*/"></div>');
+            jQuery(customSelector).after('<div class="' + customSelector.slice(1) + 'NA" style="' + priceGroupStyle + ' display:none;"></div>');
 
             productID = productID.toString().toUpperCase();
 
-            printPrice('Slowakei', 'SK', 'sk', productID);
-            printPrice('Italien', 'IT', 'it', productID);
-            printPrice('Slowenien', 'SI', 'sl', productID);
+            var priceSlowakei = await getPriceFromOtherCountryAsync('SK', 'sk', productID);
+            printNewPrice('Slowakei', priceSlowakei, customSelector);
+            var priceItalien = await getPriceFromOtherCountryAsync('IT', 'it', productID);
+            printNewPrice('Italien', priceItalien, customSelector);
+            var priceSlowenien = await getPriceFromOtherCountryAsync('SI', 'sl', productID);
+            printNewPrice('Slowenien', priceSlowenien, customSelector);
 
             var xrResponse = await getExchangeRates();
             if (xrResponse?.response?.success) {
@@ -152,12 +159,12 @@
                     .filter(property => !["CZK", "HRK", "HUF"].includes(property))
                     .forEach(property => delete newRatesResponse.rates[property])
                 console.log('new rates (short)');
-                console.log("var backupResponse = JSON.parse('"+JSON.stringify(newRatesResponse)+"');");
+                console.log("var backupResponse = JSON.parse('" + JSON.stringify(newRatesResponse) + "');");
 
-                getPriceInForeignCurrency(newRatesResponse);
+                getPriceInForeignCurrency(newRatesResponse, customSelector);
             } else {
                 console.log('couldn\'t get new rates. using old exchange rates from:', new Date(backupResponse.timestamp * 1000).toString());
-                getPriceInForeignCurrency(backupResponse);
+                getPriceInForeignCurrency(backupResponse, customSelector);
             }
 
             // setTimeout(function () {
@@ -165,7 +172,7 @@
             //     console.log('timeout done');
             // }, 1000);
 
-            jQuery('.customElementIkeaNA').after('<div style="margin-top: 12px; padding: 0 0 1rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
+            jQuery(customSelector + 'NA').after('<div style="margin-top: 12px; padding: 0 0 1rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
                 '<div style="width: 50%; padding-right: 0.5rem; padding-left: 0.0rem;">' +
                 '<a id="sortByPrice" class="hnf-link hnf-btn hnf-btn-change-country" style="width:100%; padding-left: unset; padding-right: unset;">sortieren nach Preis</a>' +
                 '</div>' +
@@ -173,9 +180,42 @@
                 '<a id="sortByCountry" class="hnf-link hnf-btn hnf-btn-change-country" style="width:100%; padding-left: unset; padding-right: unset;">sortieren nach Land</a>' +
                 '</div>' +
                 '</div>');
-            jQuery('#sortByPrice').click(function () { sortIkeas(getFancyTextPrice) });
-            jQuery('#sortByCountry').click(function () { sortIkeas(getFancyTextCountry) });
+            jQuery('#sortByPrice').click(function () { sortIkeas(getFancyTextPrice, customSelector) });
+            jQuery('#sortByCountry').click(function () { sortIkeas(getFancyTextCountry, customSelector) });
         }
+        if (favouritesList) {
+            waitForKeyElements(".ListItem_details__1MxDE", actionFunction);
+        }
+    }
+
+    var counter = 0;
+    var sum = 0;
+
+    function actionFunction(element) {
+        var innerText = element[0].innerText;
+        var productId = innerText.match(/\d{3}\.\d{3}\.\d{2}/g)[0]?.replaceAll('.', '');
+        console.log('cc', element, productId);
+        if (counter == 0) {
+            jQuery("#root > main > div > div > div:nth-child(2) > div > div.SummaryContainer_summaryContainer__2-HWj.grid-gap > div > div:nth-child(5)")
+                .after('<div class="sumOtherCountry">0</div>')
+        }
+        counter++;
+        doo(element, productId, counter);
+        console.log('sum', sum);
+    }
+
+    async function doo(element, productId, counter) {
+        var otherPrice = await getPriceFromOtherCountryAsync('SK', 'sk', productId);
+        console.log('SK', otherPrice);
+        var customSelector = '.customElementIkeaPrices' + counter;
+        jQuery(element[0].nextSibling.nextSibling)
+            .after('<div class="' + customSelector.slice(1) + '" ' +
+                'style="' + priceGroupStyle + ' display:none; /*border-bottom: 1px solid #dfdfdf; padding:10px 0;*/"></div>');
+        jQuery(customSelector).after('<div class="' + customSelector.slice(1) + 'NA" style="' + priceGroupStyle + ' display:none;"></div>');
+        printNewPrice('Slowakei', otherPrice, customSelector);
+        sum = (parseFloat(otherPrice?.priceData?.price)) ? sum + parseFloat(otherPrice?.priceData?.price) : sum;
+        console.log('sum2', sum);
+        jQuery('.sumOtherCountry')[0].innerText = sum.toFixed(3);
     }
 
     function getExchangeRates() {
@@ -191,14 +231,17 @@
         });
     }
 
-    function getPriceInForeignCurrency(response) {
-        printPrice('Tschechien', 'CZ', 'cs', productID, response.rates.CZK);
-        printPrice('Ungarn', 'HU', 'hu', productID, response.rates.HUF);
-        printPrice('Kroatien', 'HR', 'hr', productID, response.rates.HRK);
+    async function getPriceInForeignCurrency(response, customSelector) {
+        var priceTschechien = await getPriceFromOtherCountryAsync('CZ', 'cs', productID, response.rates.CZK);
+        printNewPrice('Tschechien', priceTschechien, customSelector);
+        var priceUngarn = await getPriceFromOtherCountryAsync('HU', 'hu', productID, response.rates.HUF);
+        printNewPrice('Ungarn', priceUngarn, customSelector);
+        var priceKroatien = await getPriceFromOtherCountryAsync('HR', 'hr', productID, response.rates.HRK);
+        printNewPrice('Kroatien', priceKroatien, customSelector);
     }
 
-    function sortIkeas(property) {
-        var parent = jQuery('.customElementIkeaPrices');
+    function sortIkeas(property, customSelector) {
+        var parent = jQuery(customSelector);
         // sortUsingNestedText(parent, "a", property);
         sortFancyText(parent, property);
     };
@@ -240,66 +283,98 @@
     //     parent.append(items);
     // };
 
-    function printPrice(country, countryCode, lang, productID, exchangeRate = 1) {
-        // alternative link from web product catalog
-        // var urlOtherIkea = 'https://publications-ext.ikea.com/'+country.toLowerCase()+'/'+lang+'/products/ART%2C'+productID;
-        var urlOtherIkea = 'https://www.ikea.com/' + countryCode.toLowerCase() + '/' + lang + '/catalog/products/' + productID;
-        console.log('link ', country, urlOtherIkea);
+    function getPriceFromOtherCountryAsync(countryCode, lang, productID, exchangeRate = 1) {
+        return new Promise(function (resolve) {
 
-        GM_xmlhttpRequest({
-            method: 'GET',
-            url: urlOtherIkea,
-            responseType: 'document',
-            onload: function (responseDetails) {
-                // alternative link from web product catalog
-                // var priceDiv = jQuery('.product-price',jQuery(responseDetails.responseText));
-                // alternative: search for the right class without nowing the prefix
-                // var priceDiv = jQuery('[class*="package__main-price"]', jQuery(responseDetails.responseText));
-                // get the price info text like "Cena € 54,90"
-                var priceDiv = jQuery('.pip-temp-price__sr-text', jQuery(responseDetails.responseText));
-                if (priceDiv[0]) {
-                    var priceFloat = parseFloat(priceDiv[0].innerText.replace(/\/.*|[^0-9,]/g, '').replace(',', '.'));
-                    var pricePrint = "";
-                    var exchangeText = "";
-                    if (exchangeRate != 1) {
-                        priceFloat = priceFloat / exchangeRate;
-                        // pricePrint = priceFloat.toFixed(2) + " <small>(exchange: " + exchangeRate + ")</small>";
-                        pricePrint = priceFloat.toFixed(2);
-                        exchangeText = " (XR: " + exchangeRate + ")";
+            // alternative link from web product catalog
+            // var urlOtherIkea = 'https://publications-ext.ikea.com/'+country.toLowerCase()+'/'+lang+'/products/ART%2C'+productID;
+            var urlOtherIkea = 'https://www.ikea.com/' + countryCode.toLowerCase() + '/' + lang + '/catalog/products/' + productID;
+            console.log('link ', countryCode, urlOtherIkea);
+
+            GM_xmlhttpRequest({
+                method: 'GET',
+                url: urlOtherIkea,
+                responseType: 'document',
+                onload: function (responseDetails) {
+                    // alternative link from web product catalog
+                    // var priceDiv = jQuery('.product-price',jQuery(responseDetails.responseText));
+                    // alternative: search for the right class without nowing the prefix
+                    // var priceDiv = jQuery('[class*="package__main-price"]', jQuery(responseDetails.responseText));
+                    // get the price info text like "Cena € 54,90"
+                    var responseObj = {};
+                    var priceDiv = jQuery('.pip-temp-price__sr-text', jQuery(responseDetails.responseText));
+                    if (priceDiv[0]) {
+                        var priceFloat = parseFloat(priceDiv[0].innerText.replace(/\/.*|[^0-9,]/g, '').replace(',', '.'));
+                        var pricePrint = "";
+                        var exchangeText = "";
+                        if (exchangeRate != 1) {
+                            priceFloat = priceFloat / exchangeRate;
+                            // pricePrint = priceFloat.toFixed(2) + " <small>(exchange: " + exchangeRate + ")</small>";
+                            pricePrint = priceFloat.toFixed(2);
+                            exchangeText = " (XR: " + exchangeRate + ")";
+                        } else {
+                            pricePrint = priceFloat.toFixed(2);
+                        }
+
+                        responseObj.priceData = { price: pricePrint, exchangeText: exchangeText, link: urlOtherIkea };
                     } else {
-                        pricePrint = priceFloat.toFixed(2);
+                        responseObj.priceData = { link: urlOtherIkea };
                     }
 
-                    jQuery('.customElementIkeaPrices').show();
-                    // only works when there is a bewertung
-                    // jQuery('.range-revamp-average-rating, .range-revamp-average-rating__button').after('<a style="display:block;font-size: 16px !important; color: #ca5008 !important; margin-top:5px;" id="price-' + countryCode + '-link" href="' + urlOtherIkea + '">Ikea ' + country + ': € ' + pricePrint + '</a>');
+                    // var availableDiv = jQuery('.js-stockcheck-section .pip-stockcheck__text', jQuery(responseDetails.responseText));
+                    // console.log('ggg', availableDiv);
+                    // console.log('ggg', availableDiv[0].dataset);
+                    //  availability is a seperate get call to https://api.ingka.ikea.com/cia/availabilities/ru/at?itemNos=70525679&expand=StoresList,Restocks,SalesLocations
+                    // curl --location --request GET 'https://api.ingka.ikea.com/cia/availabilities/ru/at?itemNos=70525679&expand=StoresList,Restocks,SalesLocations' \
+                    // --header 'accept: application/json;version=2' \
+                    // --header 'x-client-id: b6c117e5-ae61-4ef5-b4cc-e0b1e37f0631' \
+                    // --header 'Cookie: _abck=6293D0F276F25CDE9BE3B7C2472A7248~-1~YAAQHE4SAnMpQFWFAQAAtGGHVgkbl6ichNQkStBJF7+ZYAvr7zjUQyvpMRVo7tn/Q3DbeUJWj6TVfU27uQKRulAGyRzT+cFJZfkxiX1ki5yf+Yo4R6/OaxB1PmB0a/uuuFxkztBP11vjlqx02iQV2gNLlmKigDsEu0UvePNJ324Cvi3CzHIfFXL8/b+uILsE72BP1TmfReXc0NTiPZ8A78ZPv+sTqU8kYGAigbYIdaMtY43n8j0L6sKgMry7trcKyB79POZIAIsCBggg/VGVLwfS97TkviryaOWNNg3K0DjMycBPPVWaNoP0x8JPuT+/IwMslvJcW/SCu3+9jNWndY0VnvfKuLW3oSju2zDjn9qc4n5yPuDh~-1~-1~-1; bm_sz=0A4CC74F65AAD582242BE8B8F2D7A414~YAAQHE4SAnUpQFWFAQAAtGGHVhJkpqmgfbviom5+QwA5EHqJKV8vJHvi/GfiSz9sThsLRKBLaQSHQWo2opd0sVpg1B1eNIqgn8elxod/doqaV1lUJ/FcieFRRy0To+mx7xn7SlIl4kJwluYVxEsHSw+2XJpVMupBoWYNNdbiJfahh77u+7237nhnTmMoLkFCeFgXDXgXKMNzGHKvfp0SXtWyqIg6pUXEomsv/Vedjcse+tj5z76hUPrb0dHLQu8+4C5Nz1jcZeW+BMbJMlIWg9ccIydJz+zxaIA6fufMDtgn~3420229~3160369; ak_bmsc=11AB1498BB32800E8369B9C562A954ED~000000000000000000000000000000~YAAQHE4SAlflQFWFAQAANW2MVhLb/KrjlaJbNqRTmBHD7lq6qpilXbA4ah4OJUQ8Pt1PGJ3ZnTuEgCsjANuZ4JStgqRnxucRmMdGy+RMewd91IMGClWcYCKKZVXh3jSMsQ9Lw1U6/FqvtfMLsD2M2KfQ8X6hdwojGfgxQiJfICiro5DfNmZ+LTX7w3dwu70rKkQi2VDnWWhkkJm10gx5aOqhzAmNXvOBN0S/pkasRKdseCT3xEdm5eT/bqRPtTY+/bSU/E3QXKDxXmTHomncSAir++mdGqukM0dQYx1GZ8NJ7i90haQveFul8VEgBCryo8csLTk58PiUGjGS/N45F3d4euCE4FkwrNAH+zrrFstk2jy1nuFVbBhV5I7/XjC5qgGW+EUzuDyJPjjwFa694/rRIBCB; bm_sv=260AC2533B9AC9F2C4D9F9CE66748E1A~YAAQHE4SAq7sQFWFAQAA3J+MVhKKhwAnfJJF1NLtu9n6CbQD3UYelwsf37w6IDlfVs0cayy4VNbbX8pvLhYVXLEtLPbd0vdfXP6VshwQ49gFF0vBgtL4RVwLewCBT7Tqc/siURwqxgFP6Ovjv/6INi4LgXC6OOA6w+m01TxKxMd/p5kO9/BKxbmfzwuCOrjWmke03r3NK+GkBKGOl+P5lIw4HBDyzCOEPJLGDBEhwvPODHHdH+pNg8ALLW7LdyHU2jj1504=~1'
+                    // if (availableDiv[0].dataset.analyticsAction) {
+                    //     if (availableDiv[0].dataset.analyticsAction.includes('Available')) {
+                    //         console.log(availableDiv[0].dataset.analyticsAction);
+                    //     }
+                    // }
 
-                    // jQuery('.customElementIkeaPrices').append('<a style="display:block; margin-top:5px;" id="price-' + countryCode + '-link" href="' + urlOtherIkea + '">Ikea ' + country + ': € ' + pricePrint + '</a>');
-                    jQuery('.customElementIkeaPrices').append('<div style="' + priceWrapperStyle +'">' +
-                        '<div style="' + priceContentLeftStyle + '">' +
-                        '<span><a style="'+priceCountryLink+'" href="' + urlOtherIkea + '">Ikea ' + country +
-                        '</a>' + exchangeText + '<span></div>' +
-                        '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
-                        '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
-                        '<span style="margin-right: 0.0625rem; font-size: 0.625rem; vertical-align: text-top;">€ </span>' +
-                        '<span style="font-size: 1rem; vertical-align: text-bottom;">' + pricePrint.split(".")[0] + '</span>' +
-                        '<span style="font-size: 0.625rem; vertical-align: text-top; margin-left: .0625rem;">,' + pricePrint.split(".")[1] +
-                        '</span>' +
-                        '</span></div></div></div>');
-                } else {
-                    jQuery('.customElementIkeaNA').show();
-                    // jQuery('.customElementIkeaNA').append('<div id="price-' + countryCode + '-link"><a class="' + cssClassPreFix + '-link" href="'+urlOtherIkea+'">Ikea ' + country + '</a>: n.a.</div>');
-                    jQuery('.customElementIkeaNA').append('<div class="' + cssClassPreFix + '-pip-price-package__wrapper">' +
-                        '<div class="' + cssClassPreFix + '-pip-price-package__content-left">' +
-                        '<span><a style="'+priceCountryLink+'" href="' + urlOtherIkea + '">Ikea ' + country +
-                        '</a><span></div>' +
-                        '<div class="' + cssClassPreFix + '-pip-price-package__price-wrapper"><div class="' + cssClassPreFix + '-pip-price-package__main-price">' +
-                        '<span class="' + cssClassPreFix + '-price" style="font-weight: normal;">' +
-                        '<span style="vertical-align: text-bottom;">n.a.</span>' +
-                        '</span></div></div></div>');
+                    resolve(responseObj);
                 }
-            }
+            });
         });
-    };
+    }
+
+    function printNewPrice(country, productData, customSelector) {
+        var priceData = productData.priceData;
+        var urlOtherIkea = priceData?.link;
+        if (priceData?.price) {
+            var price = priceData.price;
+            var exchangeText = priceData.exchangeText;
+            jQuery(customSelector).show();
+            // only works when there is a bewertung
+            // jQuery('.range-revamp-average-rating, .range-revamp-average-rating__button').after('<a style="display:block;font-size: 16px !important; color: #ca5008 !important; margin-top:5px;" id="price-' + countryCode + '-link" href="' + urlOtherIkea + '">Ikea ' + country + ': € ' + pricePrint + '</a>');
+
+            // jQuery('.customElementIkeaPrices').append('<a style="display:block; margin-top:5px;" id="price-' + countryCode + '-link" href="' + urlOtherIkea + '">Ikea ' + country + ': € ' + pricePrint + '</a>');
+            jQuery(customSelector).append('<div style="' + priceWrapperStyle + '">' +
+                '<div style="' + priceContentLeftStyle + '">' +
+                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + country +
+                '</a>' + exchangeText + '<span></div>' +
+                '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
+                '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
+                '<span style="margin-right: 0.0625rem; font-size: 0.625rem; vertical-align: text-top;">€ </span>' +
+                '<span style="font-size: 1rem; vertical-align: text-bottom;">' + price.split(".")[0] + '</span>' +
+                '<span style="font-size: 0.625rem; vertical-align: text-top; margin-left: .0625rem;">,' + price.split(".")[1] +
+                '</span>' +
+                '</span></div></div></div>');
+        } else {
+            jQuery(customSelector + 'NA').show();
+            // jQuery('.customElementIkeaNA').append('<div id="price-' + countryCode + '-link"><a class="' + cssClassPreFix + '-link" href="'+urlOtherIkea+'">Ikea ' + country + '</a>: n.a.</div>');
+            jQuery(customSelector + 'NA').append('<div class="' + cssClassPreFix + '-pip-price-package__wrapper">' +
+                '<div class="' + cssClassPreFix + '-pip-price-package__content-left">' +
+                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + country +
+                '</a><span></div>' +
+                '<div class="' + cssClassPreFix + '-pip-price-package__price-wrapper"><div class="' + cssClassPreFix + '-pip-price-package__main-price">' +
+                '<span class="' + cssClassPreFix + '-price" style="font-weight: normal;">' +
+                '<span style="vertical-align: text-bottom;">n.a.</span>' +
+                '</span></div></div></div>');
+        }
+    }
 
 })();
