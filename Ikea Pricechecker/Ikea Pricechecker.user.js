@@ -26,6 +26,13 @@
     // {"success":true,"timestamp":1649112186,"base":"EUR","date":"2022-04-04","rates":{"AED":4.031018,"AFN":97.672391,"ALL":121.593087,"AMD":530.229252,"ANG":1.977425,"AOA":487.894301,"ARS":122.459909,"AUD":1.454337,"AWG":1.975945,"AZN":1.867486,"BAM":1.950626,"BBD":2.21541,"BDT":94.608429,"BGN":1.956065,"BHD":0.413778,"BIF":2205.858929,"BMD":1.097442,"BND":1.4893,"BOB":7.543345,"BRL":5.043291,"BSD":1.097183,"BTC":2.3515602e-5,"BTN":82.863847,"BWP":12.61895,"BYN":3.573307,"BYR":21509.868167,"BZD":2.21162,"CAD":1.370321,"CDF":2208.053892,"CHF":1.016667,"CLF":0.030984,"CLP":854.940374,"CNY":6.983459,"COP":4065.474828,"CRC":728.183993,"CUC":1.097442,"CUP":29.08222,"CVE":110.677454,"CZK":24.344007,"DJF":195.037445,"DKK":7.437915,"DOP":60.414016,"DZD":157.424544,"EGP":20.015042,"ERN":16.461639,"ETB":56.024346,"EUR":1,"FJD":2.296453,"FKP":0.841693,"GBP":0.83679,"GEL":3.380255,"GGP":0.841693,"GHS":8.258236,"GIP":0.841693,"GMD":59.050437,"GNF":9745.287007,"GTQ":8.431176,"GYD":229.549701,"HKD":8.598191,"HNL":26.776913,"HRK":7.543161,"HTG":115.088967,"HUF":368.883491,"IDR":15724.701328,"ILS":3.522493,"IMP":0.841693,"INR":82.788575,"IQD":1602.814411,"IRR":46476.679775,"ISK":141.602723,"JEP":0.841693,"JMD":168.219758,"JOD":0.778075,"JPY":134.697868,"KES":126.3135,"KGS":94.124003,"KHR":4444.641411,"KMF":492.586457,"KPW":987.698412,"KRW":1332.986114,"KWD":0.334007,"KYD":0.914369,"KZT":513.083798,"LAK":12933.357367,"LBP":1661.527301,"LKR":323.562152,"LRD":167.497136,"LSL":16.027669,"LTL":3.240462,"LVL":0.663832,"LYD":5.11955,"MAD":10.698419,"MDL":20.104899,"MGA":4373.307126,"MKD":61.62383,"MMK":1951.018169,"MNT":3159.286899,"MOP":8.855015,"MRO":391.786696,"MUR":49.044292,"MVR":16.955233,"MWK":889.4741,"MXN":21.742086,"MYR":4.62846,"MZN":70.049873,"NAD":16.022551,"NGN":456.228434,"NIO":39.211697,"NOK":9.563496,"NPR":132.580511,"NZD":1.579247,"OMR":0.422429,"PAB":1.097183,"PEN":3.98426,"PGK":3.852232,"PHP":56.452503,"PKR":201.408102,"PLN":4.619558,"PYG":7598.428979,"QAR":3.995804,"RON":4.942776,"RSD":117.733868,"RUB":91.910784,"RWF":1122.683425,"SAR":4.116881,"SBD":8.797168,"SCR":15.816447,"SDG":490.007657,"SEK":10.344707,"SGD":1.488678,"SHP":1.511617,"SLL":13043.101586,"SOS":643.100936,"SRD":22.702807,"STD":22714.838919,"SVC":9.59969,"SYP":2756.775311,"SZL":16.025916,"THB":36.715482,"TJS":13.686689,"TMT":3.852022,"TND":3.281905,"TOP":2.472103,"TRY":16.121318,"TTD":7.450392,"TWD":31.406275,"TZS":2553.74839,"UAH":32.255597,"UGX":3900.310467,"USD":1.097442,"UYU":45.134003,"UZS":12527.30329,"VEF":234666321051.95837,"VND":25073.811885,"VUV":125.236383,"WST":2.877544,"XAF":654.199809,"XAG":0.044705,"XAU":0.000568,"XCD":2.965893,"XDR":0.794865,"XOF":651.331443,"XPF":119.977883,"YER":274.635243,"ZAR":16.011627,"ZMK":9878.29753,"ZMW":19.282054,"ZWL":353.375958}}
     // {"success":true,"timestamp":1671317283,"base":"EUR","date":"2022-12-17","rates":{"AED":3.893055,"AFN":92.949045,"ALL":114.398825,"AMD":420.405682,"ANG":1.91668,"AOA":534.604039,"ARS":182.778523,"AUD":1.585549,"AWG":1.90789,"AZN":1.806104,"BAM":1.95581,"BBD":2.147378,"BDT":110.925061,"BGN":1.956374,"BHD":0.400896,"BIF":2202.977373,"BMD":1.059939,"BND":1.442985,"BOB":7.348925,"BRL":5.626709,"BSD":1.063489,"BTC":6.334929e-5,"BTN":88.060996,"BWP":13.811958,"BYN":2.684472,"BYR":20774.806624,"BZD":2.143778,"CAD":1.456728,"CDF":2154.856601,"CHF":0.987671,"CLF":0.034053,"CLP":931.695931,"CNY":7.391172,"COP":5098.447634,"CRC":632.393505,"CUC":1.059939,"CUP":28.088387,"CVE":110.263867,"CZK":24.258869,"DJF":189.328055,"DKK":7.447349,"DOP":58.818396,"DZD":145.523505,"EGP":26.126732,"ERN":15.899087,"ETB":56.924815,"EUR":1,"FJD":2.338336,"FKP":0.870912,"GBP":0.872809,"GEL":2.809253,"GGP":0.870912,"GHS":9.571702,"GIP":0.870912,"GMD":65.716602,"GNF":9164.305874,"GTQ":8.369914,"GYD":222.507715,"HKD":8.251524,"HNL":26.25073,"HRK":7.549739,"HTG":154.742411,"HUF":406.052486,"IDR":16551.956199,"ILS":3.671315,"IMP":0.870912,"INR":87.692477,"IQD":1552.224057,"IRR":43881.47967,"ISK":151.469344,"JEP":0.870912,"JMD":163.250323,"JOD":0.751819,"JPY":144.909618,"KES":130.866056,"KGS":90.042235,"KHR":4369.955117,"KMF":492.133754,"KPW":953.921202,"KRW":1388.478248,"KWD":0.325232,"KYD":0.886291,"KZT":496.5149,"LAK":18386.111158,"LBP":1608.283481,"LKR":390.843386,"LRD":163.230993,"LSL":18.740128,"LTL":3.129725,"LVL":0.641147,"LYD":5.126247,"MAD":11.150985,"MDL":20.589689,"MGA":4709.901625,"MKD":61.614367,"MMK":2233.390261,"MNT":3635.329341,"MOP":8.524712,"MRO":378.398081,"MUR":46.902707,"MVR":16.327028,"MWK":1091.601788,"MXN":20.972489,"MYR":4.689705,"MZN":67.656314,"NAD":18.740123,"NGN":472.171476,"NIO":38.828601,"NOK":10.491331,"NPR":140.897553,"NZD":1.664216,"OMR":0.409396,"PAB":1.063489,"PEN":4.075658,"PGK":3.795561,"PHP":58.858816,"PKR":239.158844,"PLN":4.691152,"PYG":7673.221189,"QAR":3.858974,"RON":4.920771,"RSD":117.478392,"RUB":68.763591,"RWF":1130.458389,"SAR":3.983315,"SBD":8.695299,"SCR":13.823858,"SDG":603.105715,"SEK":11.035666,"SGD":1.440355,"SHP":1.459964,"SLE":19.836972,"SLL":19815.562085,"SOS":603.105714,"SRD":33.522735,"STD":21938.59964,"SVC":9.305904,"SYP":2662.529272,"SZL":18.707808,"THB":36.931499,"TJS":10.842589,"TMT":3.720386,"TND":3.345433,"TOP":2.489744,"TRY":19.756527,"TTD":7.219126,"TWD":32.631078,"TZS":2482.254505,"UAH":39.085899,"UGX":3892.460021,"USD":1.059939,"UYU":41.099578,"UZS":11980.506949,"VEF":1646972.326076,"VES":16.484438,"VND":25019.862773,"VUV":125.692746,"WST":2.871138,"XAF":655.950263,"XAG":0.045658,"XAU":0.000591,"XCD":2.864539,"XDR":0.799192,"XOF":655.950263,"XPF":119.640667,"YER":265.306569,"ZAR":18.694687,"ZMK":9540.727752,"ZMW":18.813607,"ZWL":341.299962}}
 
+    var countriesToCheck = [{ name: 'Slowakei', countryCode: 'SK', lang: 'sk' },
+    { name: 'Italien', countryCode: 'IT', lang: 'it' },
+    { name: 'Slowenien', countryCode: 'SI', lang: 'sl' },
+    { name: 'Tschechien', countryCode: 'CZ', lang: 'cs', exchangeRateReference: 'CZK' },
+    { name: 'Ungarn', countryCode: 'HU', lang: 'hu', exchangeRateReference: 'HUF' },
+    { name: 'Kroatien', countryCode: 'HR', lang: 'hr', exchangeRateReference: 'HRK' }];
+
     // original class: range-revamp-pip-price-package, then pip-pip-price-package, then ?
     var priceGroupStyle = "-webkit-text-size-adjust: 100%;\
     font: 100% sans-serif;\
@@ -122,6 +129,60 @@
     font-size: 1rem;\
     white-space: pre;\
     font-weight: normal;";
+    // original class: PriceRow_row__Q3m-v, elements: div over 'Preis ohne USt' or 'USt.'
+    var sumPriceCountryContainer = "    -webkit-text-size-adjust: 100%; \
+    font: 100% sans-serif; \
+    --ikea-font: 'Noto IKEA', 'Noto Sans', 'Roboto', 'Open Sans', system-ui, sans-serif !important; \
+    font-family: var(--ikea-font); \
+    color: rgb(var(--colour-text-and-icon-2, 72, 72, 72)); \
+    font-size: .875rem; \
+    line-height: 1.571; \
+    box-sizing: inherit; \
+    outline: none; \
+    margin: 0; \
+    padding: 0; \
+    display: flex; \
+    justify-content: space-between; \
+    margin-bottom: 1.25rem;";
+    // original class: list-ingka-price list-ingka-price--leading list-ingka-price--fixed-size list-ingka-price--leading list-ingka-price--small list-ingka-price--regular-font-weight PriceRow_priceCustomSize__G1QU3
+    // span -> span (this) -> span symbol, span price
+    var sumPriceCountryPriceContainer = "    -webkit-text-size-adjust: 100%; \
+    font: 100% sans-serif; \
+    --ikea-font: 'Noto IKEA', 'Noto Sans', 'Roboto', 'Open Sans', system-ui, sans-serif !important; \
+    font-family: var(--ikea-font); \
+    box-sizing: inherit; \
+    outline: none; \
+    line-height: 1; \
+    position: relative; \
+    color: rgb(var(--colour-text-and-icon-1,17,17,17)); \
+    font-weight: 400; \
+    font-size: .875rem;";
+    // original class: list-ingka-price__currency
+    var sumPriceCountryPriceContainerCurrency = "    -webkit-text-size-adjust: 100%; \
+    font: 100% sans-serif; \
+    --ikea-font: 'Noto IKEA', 'Noto Sans', 'Roboto', 'Open Sans', system-ui, sans-serif !important; \
+    font-family: var(--ikea-font); \
+    color: rgb(var(--colour-text-and-icon-1,17,17,17)); \
+    font-weight: 400; \
+    box-sizing: inherit; \
+    outline: none; \
+    margin-inline-end: .125rem; \
+    position: relative; \
+    unicode-bidi: bidi-override; \
+    font-size: 1em; \
+    line-height: 1; \
+    top: auto;";
+    // original class: list-ingka-price__integer
+    var sumPriceCountryPriceContainerPrice = "    -webkit-text-size-adjust: 100%; \
+    font: 100% sans-serif; \
+    --ikea-font: 'Noto IKEA', 'Noto Sans', 'Roboto', 'Open Sans', system-ui, sans-serif !important; \
+    font-family: var(--ikea-font); \
+    line-height: 1; \
+    color: rgb(var(--colour-text-and-icon-1,17,17,17)); \
+    font-weight: 400; \
+    font-size: .875rem; \
+    box-sizing: inherit; \
+    outline: none;";
 
     var cssClassPreFix = 'pip'; // previously: range-revamp
     var url = window.location.href;
@@ -130,6 +191,7 @@
     main();
 
     async function main() {
+        // when product page is open
         if (productID) {
             var customSelector = '.customElementIkeaPrices';
             // find title, description, price and stars
@@ -140,19 +202,13 @@
 
             productID = productID.toString().toUpperCase();
 
-            var priceSlowakei = await getPriceFromOtherCountryAsync('SK', 'sk', productID);
-            printNewPrice('Slowakei', priceSlowakei, customSelector);
-            var priceItalien = await getPriceFromOtherCountryAsync('IT', 'it', productID);
-            printNewPrice('Italien', priceItalien, customSelector);
-            var priceSlowenien = await getPriceFromOtherCountryAsync('SI', 'sl', productID);
-            printNewPrice('Slowenien', priceSlowenien, customSelector);
-
+            // by default use saved rates
+            var usedRates = backupResponse;
+            // check if new rates are available
             var xrResponse = await getExchangeRates();
             if (xrResponse?.response?.success) {
-                var newRatesDate = new Date(xrResponse.response.timestamp * 1000).toString();
-                console.log('rates from ', newRatesDate);
-                console.log('new complete rates: ');
-                console.log(xrResponse.responseText);
+                console.log('rates from ', new Date(xrResponse.response.timestamp * 1000).toString());
+                console.log('new complete rates: ', xrResponse.responseText);
 
                 var newRatesResponse = xrResponse.response;
                 Object.keys(newRatesResponse.rates)
@@ -160,18 +216,30 @@
                     .forEach(property => delete newRatesResponse.rates[property])
                 console.log('new rates (short)');
                 console.log("var backupResponse = JSON.parse('" + JSON.stringify(newRatesResponse) + "');");
-
-                getPriceInForeignCurrency(newRatesResponse, customSelector);
+                usedRates = newRatesResponse;
             } else {
                 console.log('couldn\'t get new rates. using old exchange rates from:', new Date(backupResponse.timestamp * 1000).toString());
-                getPriceInForeignCurrency(backupResponse, customSelector);
             }
 
+            // get price and print it for every country in list
+            for (const country of countriesToCheck) {
+                // if a country has the attribute 'exchangeRateReference', check and replace with the actual value
+                if (country?.exchangeRateReference) {
+                    country.exchangeRateReference = usedRates.rates[country.exchangeRateReference];
+                }
+                // get new price from other country
+                var countryPriceDate = await getPriceFromOtherCountryAsync(country.countryCode, country.lang, productID, country?.exchangeRateReference);
+                // print the price on the website
+                printNewPrice(country.name, countryPriceDate, customSelector);
+            }
+
+            // this was an unsuccessful try to sort the list of all new prices. but didn't work
             // setTimeout(function () {
             //     sortIkeas(getFancyTextPrice);
             //     console.log('timeout done');
             // }, 1000);
 
+            // create element for sort the prices
             jQuery(customSelector + 'NA').after('<div style="margin-top: 12px; padding: 0 0 1rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
                 '<div style="width: 50%; padding-right: 0.5rem; padding-left: 0.0rem;">' +
                 '<a id="sortByPrice" class="hnf-link hnf-btn hnf-btn-change-country" style="width:100%; padding-left: unset; padding-right: unset;">sortieren nach Preis</a>' +
@@ -183,39 +251,65 @@
             jQuery('#sortByPrice').click(function () { sortIkeas(getFancyTextPrice, customSelector) });
             jQuery('#sortByCountry').click(function () { sortIkeas(getFancyTextCountry, customSelector) });
         }
+        // when wishlist is open
         if (favouritesList) {
-            waitForKeyElements(".ListItem_details__1MxDE", actionFunction);
+            // .ListItem_details__1MxDE: is class of div element that contains the product name, details, id and price per piece
+            // only when those details are available, then we know all data(items of wishlist) are loaded
+            waitForKeyElements(".ListItem_details__1MxDE", getPriceForEachItemOnWishlistAfterLoad);
         }
     }
 
+    // count elements on wishlist
     var counter = 0;
+    // sum of all items on wishlist including their selected quantitiy
     var sum = 0;
 
-    function actionFunction(element) {
-        var innerText = element[0].innerText;
-        var productId = innerText.match(/\d{3}\.\d{3}\.\d{2}/g)[0]?.replaceAll('.', '');
-        console.log('cc', element, productId);
+    function getPriceForEachItemOnWishlistAfterLoad(divElementProductInfos) {
+        var productId = divElementProductInfos[0]?.innerText?.match(/\d{3}\.\d{3}\.\d{2}/g)[0]?.replaceAll('.', '');
+        // console.log('cc', element, productId);
+        // only for the first time, (after the lements are loaded) create the sum entry on the right
         if (counter == 0) {
-            jQuery("#root > main > div > div > div:nth-child(2) > div > div.SummaryContainer_summaryContainer__2-HWj.grid-gap > div > div:nth-child(5)")
-                .after('<div class="sumOtherCountry">0</div>')
+            // find element which contains the text 'Normalpreis'
+            jQuery("div.ListSummary_summary__XGLHQ > div:contains('Normalpreis')")
+                .after('<div style="'+sumPriceCountryContainer+'">\
+                <span>Normalpreis Slowakei</span>\
+                <span><span style="'+sumPriceCountryPriceContainer+'"><span>\
+                <span style="'+sumPriceCountryPriceContainerCurrency+'">€</span>\
+                <span class="sumOtherCountry" style="'+sumPriceCountryPriceContainerPrice+'">0</span>\
+                </span></span></span>\
+                </div>');
         }
         counter++;
-        doo(element, productId, counter);
-        console.log('sum', sum);
+        doo(divElementProductInfos, productId, counter);
     }
 
     async function doo(element, productId, counter) {
         var otherPrice = await getPriceFromOtherCountryAsync('SK', 'sk', productId);
-        console.log('SK', otherPrice);
+        // console.log('otherprice:', otherPrice);
         var customSelector = '.customElementIkeaPrices' + counter;
-        jQuery(element[0].nextSibling.nextSibling)
+
+        // want the information of how many of this product are saved in the list
+        // the number currenlty is 2 siblings after current element or at the end before we add our custom div elements
+        // #root > main > div > div > div:nth-child(2) > div > div.ListContainer_listContainer__1QeiA.grid-gap > ul:nth-child(4) > li:nth-child(1) > div.ListItem_controls__jR0ZV
+        // jQuery explained: from the current element, which is the infos of one item, get the siblings, last one, then div, div, input
+        var quantity = jQuery(' ~ div:last-child > div > div > input', element)[0].value;
+        quantity = parseFloat(quantity) ? parseFloat(quantity) : 0;
+        otherPrice.priceData.quantity = quantity;
+
+        // place the custom element after the last div of this list's entry. both selectors work fine
+        // jQuery(element[0].nextSibling.nextSibling)
+        console.log('aa', element);
+        console.log('bb', jQuery('ul > li:nth-last-child(2)', element));
+        jQuery(element[0].parentNode.lastChild)
             .after('<div class="' + customSelector.slice(1) + '" ' +
                 'style="' + priceGroupStyle + ' display:none; /*border-bottom: 1px solid #dfdfdf; padding:10px 0;*/"></div>');
         jQuery(customSelector).after('<div class="' + customSelector.slice(1) + 'NA" style="' + priceGroupStyle + ' display:none;"></div>');
-        printNewPrice('Slowakei', otherPrice, customSelector);
-        sum = (parseFloat(otherPrice?.priceData?.price)) ? sum + parseFloat(otherPrice?.priceData?.price) : sum;
-        console.log('sum2', sum);
-        jQuery('.sumOtherCountry')[0].innerText = sum.toFixed(3);
+
+        printNewPriceInWishlist('Slowakei', otherPrice, customSelector);
+
+        sum = (parseFloat(otherPrice?.priceData?.price)) ? sum + (parseFloat(otherPrice?.priceData?.price) * quantity) : sum;
+        // console.log('sum2', sum);
+        jQuery('.sumOtherCountry')[0].innerText = sum.toFixed(2);
     }
 
     function getExchangeRates() {
@@ -229,15 +323,6 @@
                 }
             })
         });
-    }
-
-    async function getPriceInForeignCurrency(response, customSelector) {
-        var priceTschechien = await getPriceFromOtherCountryAsync('CZ', 'cs', productID, response.rates.CZK);
-        printNewPrice('Tschechien', priceTschechien, customSelector);
-        var priceUngarn = await getPriceFromOtherCountryAsync('HU', 'hu', productID, response.rates.HUF);
-        printNewPrice('Ungarn', priceUngarn, customSelector);
-        var priceKroatien = await getPriceFromOtherCountryAsync('HR', 'hr', productID, response.rates.HRK);
-        printNewPrice('Kroatien', priceKroatien, customSelector);
     }
 
     function sortIkeas(property, customSelector) {
@@ -372,6 +457,38 @@
                 '</a><span></div>' +
                 '<div class="' + cssClassPreFix + '-pip-price-package__price-wrapper"><div class="' + cssClassPreFix + '-pip-price-package__main-price">' +
                 '<span class="' + cssClassPreFix + '-price" style="font-weight: normal;">' +
+                '<span style="vertical-align: text-bottom;">n.a.</span>' +
+                '</span></div></div></div>');
+        }
+    }
+
+    function printNewPriceInWishlist(country, productData, customSelector) {
+        var priceData = productData.priceData;
+        var urlOtherIkea = priceData?.link;
+        if (priceData?.price) {
+            var price = priceData.price;
+            var exchangeText = priceData.exchangeText;
+            jQuery(customSelector).show();
+            // only works when there is a bewertung
+            // jQuery('.range-revamp-average-rating, .range-revamp-average-rating__button').after('<a style="display:block;font-size: 16px !important; color: #ca5008 !important; margin-top:5px;" id="price-' + countryCode + '-link" href="' + urlOtherIkea + '">Ikea ' + country + ': € ' + pricePrint + '</a>');
+
+            // jQuery('.customElementIkeaPrices').append('<a style="display:block; margin-top:5px;" id="price-' + countryCode + '-link" href="' + urlOtherIkea + '">Ikea ' + country + ': € ' + pricePrint + '</a>');
+            jQuery(customSelector).append('<div style="' + null + '">' +
+                '<a style="' + null + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + country +
+                '</a>' + exchangeText + ' Price each: € ' +
+                price.split(".")[0] + ',' +
+                price.split(".")[1] +
+                '\ttotal: ' + parseFloat(price * priceData.quantity) +
+                '</div>');
+        } else {
+            jQuery(customSelector + 'NA').show();
+            // jQuery('.customElementIkeaNA').append('<div id="price-' + countryCode + '-link"><a class="' + cssClassPreFix + '-link" href="'+urlOtherIkea+'">Ikea ' + country + '</a>: n.a.</div>');
+            jQuery(customSelector + 'NA').append('<div class="' + null + '-pip-price-package__wrapper">' +
+                '<div class="' + null + '-pip-price-package__content-left">' +
+                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + country +
+                '</a><span></div>' +
+                '<div class="' + null + '-pip-price-package__price-wrapper"><div class="' + null + '-pip-price-package__main-price">' +
+                '<span class="' + null + '-price" style="font-weight: normal;">' +
                 '<span style="vertical-align: text-bottom;">n.a.</span>' +
                 '</span></div></div></div>');
         }
