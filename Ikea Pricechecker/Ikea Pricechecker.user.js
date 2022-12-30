@@ -15,6 +15,12 @@
 // @grant    GM_addStyle
 // ==/UserScript==
 
+// TODO: bug in wishlist: when selecting to check availability in store, not online, quantity cannot be found. error at column 310
+// TODO: add availability for single product and for each items in wishlist. see comments get api.ingka.ikea.com
+// TODO: single product page: sort prices auto after all infos are loaded
+// TODO: wishlist: add buttons to sort the prices of other countries like on single product page
+// TODO: wishlist: sort prices auto after all infos are loaded
+
 (function () {
     'use strict';
     // $.noConflict();
@@ -187,10 +193,18 @@
     box-sizing: inherit; \
     outline: none;";
 
-    var cssClassPreFix = 'pip'; // previously: range-revamp
     var url = window.location.href;
     var productID = url.match(/\w*\d{8}/g);
     var favouritesList = url.match(/.*\/favourites\/.*/g);
+    var counters = [];
+    var sums = [];
+    for (const country of countriesToCheck) {
+        // sum of all items on wishlist including their selected quantitiy
+        sums[country.countryCode] = 0;
+        // count elements on wishlist
+        counters[country.countryCode] = 0;
+    }
+
     main();
 
     async function main() {
@@ -262,34 +276,21 @@
         }
     }
 
-    var counters = [];
-    var sums = [];
-    for (const country of countriesToCheck) {
-        // sum of all items on wishlist including their selected quantitiy
-        sums[country.countryCode] = 0;
-        // count elements on wishlist
-        counters[country.countryCode] = 0;
-    }
-
     function getPriceForEachItemOnWishlistAfterLoad(divElementProductInfos) {
         // get price and print it for every country in list
         for (const country of countriesToCheck) {
             var productId = divElementProductInfos[0]?.innerText?.match(/\d{3}\.\d{3}\.\d{2}/g)[0]?.replaceAll('.', '');
-            // console.log('cc', element, productId);
             // only for the first time, (after the lements are loaded) create the sum entry on the right
             if (counters[country.countryCode] == 0) {
                 // find element which contains the text 'Normalpreis'
-                var preisSummary = jQuery("div.ListSummary_summary__XGLHQ > :nth-last-child(3)");
-                // for (const country of countriesToCheck.reverse()) {
-                console.log('ss', country.countryCode, preisSummary);
-                jQuery(preisSummary).after('<div style="' + sumPriceCountryContainer + '">\
+                jQuery('div.ListSummary_summary__XGLHQ > :nth-last-child(3)')
+                    .after('<div style="' + sumPriceCountryContainer + '">\
                 <span>Normalpreis '+ country.name + '</span>\
                 <span><span style="'+ sumPriceCountryPriceContainer + '"><span>\
                 <span style="'+ sumPriceCountryPriceContainerCurrency + '">€</span>\
                 <span class="sum'+ country.countryCode + '" style="' + sumPriceCountryPriceContainerPrice + '">0</span>\
                 </span></span></span>\
                 </div>');
-                // }
             }
             counters[country.countryCode]++;
             doo(divElementProductInfos, productId, counters[country.countryCode], country);
@@ -297,9 +298,7 @@
     }
 
     async function doo(element, productId, counter, country) {
-
         var otherPrice = await getPriceFromOtherCountryAsync(country.countryCode, country.lang, productId, backupResponse.rates[country?.exchangeRateReference]);
-        // console.log('otherprice:', otherPrice);
         var customSelector = '.customElementIkeaPrices' + counter;
 
         // want the information of how many of this product are saved in the list
@@ -317,13 +316,10 @@
             <span class="">€ '+ otherPrice?.priceData?.price + '</span> \
             </li>');
 
-        // console.log('aa', element);
-        // console.log('bb', jQuery('+ div', element));
         // total price on the right side
         jQuery('+ div > :nth-last-child(2)', element).after('<span>' + country.countryCode + ': € ' + parseFloat(otherPrice?.priceData?.price * quantity).toFixed(2) + '</span>');
 
         sums[country.countryCode] = (parseFloat(otherPrice?.priceData?.price)) ? sums[country.countryCode] + (parseFloat(otherPrice?.priceData?.price) * quantity) : sums[country.countryCode];
-        // console.log('sum2', country.countryCode, sums[country.countryCode].toFixed(2));
         jQuery('.sum' + country.countryCode)[0].innerText = sums[country.countryCode].toFixed(2);
     }
 
@@ -448,10 +444,6 @@
             var price = priceData.price;
             var exchangeText = priceData.exchangeText;
             jQuery(customSelector).show();
-            // only works when there is a bewertung
-            // jQuery('.range-revamp-average-rating, .range-revamp-average-rating__button').after('<a style="display:block;font-size: 16px !important; color: #ca5008 !important; margin-top:5px;" id="price-' + countryCode + '-link" href="' + urlOtherIkea + '">Ikea ' + country + ': € ' + pricePrint + '</a>');
-
-            // jQuery('.customElementIkeaPrices').append('<a style="display:block; margin-top:5px;" id="price-' + countryCode + '-link" href="' + urlOtherIkea + '">Ikea ' + country + ': € ' + pricePrint + '</a>');
             jQuery(customSelector).append('<div style="' + priceWrapperStyle + '">' +
                 '<div style="' + priceContentLeftStyle + '">' +
                 '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + country +
@@ -465,13 +457,12 @@
                 '</span></div></div></div>');
         } else {
             jQuery(customSelector + 'NA').show();
-            // jQuery('.customElementIkeaNA').append('<div id="price-' + countryCode + '-link"><a class="' + cssClassPreFix + '-link" href="'+urlOtherIkea+'">Ikea ' + country + '</a>: n.a.</div>');
-            jQuery(customSelector + 'NA').append('<div class="' + cssClassPreFix + '-pip-price-package__wrapper">' +
-                '<div class="' + cssClassPreFix + '-pip-price-package__content-left">' +
+            jQuery(customSelector + 'NA').append('<div style="' + priceWrapperStyle + '">' +
+                '<div style="' + priceContentLeftStyle + '">' +
                 '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + country +
                 '</a><span></div>' +
-                '<div class="' + cssClassPreFix + '-pip-price-package__price-wrapper"><div class="' + cssClassPreFix + '-pip-price-package__main-price">' +
-                '<span class="' + cssClassPreFix + '-price" style="font-weight: normal;">' +
+                '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
+                '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
                 '<span style="vertical-align: text-bottom;">n.a.</span>' +
                 '</span></div></div></div>');
         }
