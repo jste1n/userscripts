@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ikea Pricechecker
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.1.1
 // @description  forked from Tiuz https://pastebin.com/5qkwpVvV - Vergleicht die Preise auf der österreichischen Ikea Seite mit den Preisen von IKEA SK/IT/CZ/HU/HR
 // @author       JP Stoni
 // @match        https://www.ikea.com/at/*
@@ -259,7 +259,7 @@
         if (productID) {
             var customSelector = '.customElementIkeaPrices';
             // find title, description, price and stars
-            jQuery('.js-price-package, .pip-temp-price-module')
+            jQuery('.js-price-package')
                 .after('<div class=' + customSelector.slice(1) +
                     ' style="' + priceGroupStyle + ' display:none; /*border-bottom: 1px solid #dfdfdf; padding:10px 0;*/"></div>');
             jQuery(customSelector).after('<div class="' + customSelector.slice(1) + 'NA" style="' + priceGroupStyle + ' display:none;"></div>');
