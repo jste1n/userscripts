@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ikea Pricechecker
 // @namespace    http://tampermonkey.net/
-// @version      1.1.1
+// @version      1.1.2
 // @description  forked from Tiuz https://pastebin.com/5qkwpVvV - Vergleicht die Preise auf der österreichischen Ikea Seite mit den Preisen von IKEA SK/IT/CZ/HU/HR
 // @author       JP Stoni
 // @match        https://www.ikea.com/at/*
@@ -445,7 +445,14 @@
                     // var priceDiv = jQuery('[class*="package__main-price"]', jQuery(responseDetails.responseText));
                     // get the price info text like "Cena € 54,90"
                     var responseObj = {};
-                    var priceDiv = jQuery('.pip-temp-price__sr-text', jQuery(responseDetails.responseText));
+                    var priceDiv;
+                    var priceDivAddon = jQuery('.pip-temp-price-module__addons', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text');
+                    if (priceDivAddon.length != 0) {
+                        console.log('family price exists for country', countryCode);
+                        priceDiv = priceDivAddon;
+                    } else {
+                        priceDiv = jQuery('.pip-temp-price-module__price', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text')
+                    }
                     if (priceDiv[0]) {
                         var priceFloat = parseFloat(priceDiv[0].innerText.replace(/\/.*|[^0-9,]/g, '').replace(',', '.'));
                         var pricePrint = "";
