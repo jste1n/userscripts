@@ -164,7 +164,7 @@
     padding: 0; \
     display: flex; \
     justify-content: space-between; \
-    margin-bottom: 1.25rem;";
+    margin-top: 1.25rem;";
     // original class: list-ingka-price list-ingka-price--leading list-ingka-price--fixed-size list-ingka-price--leading list-ingka-price--small list-ingka-price--regular-font-weight PriceRow_priceCustomSize__G1QU3
     // span -> span (this) -> span symbol, span price
     var sumPriceCountryPriceContainer = "    -webkit-text-size-adjust: 100%; \
@@ -331,12 +331,7 @@
     var favouritesList = url.match(/.*\/favourites\/.*/g);
     var counters = [];
     var sums = [];
-    for (const country of countriesToCheck) {
-        // sum of all items on wishlist including their selected quantitiy
-        sums[country.countryCode] = 0;
-        // count elements on wishlist
-        counters[country.countryCode] = 0;
-    }
+    resetSumValues();
 
     main();
 
@@ -380,7 +375,7 @@
                 // get new price from other country
                 var countryPriceDate = await getPriceFromOtherCountryAsync(country.countryCode, country.lang, productID, country?.exchangeRateReference);
                 // print the price on the website
-                printNewPrice(country.name, countryPriceDate, customSelector);
+                printNewPriceProductPage(country.name, countryPriceDate, customSelector);
             }
 
             // this was an unsuccessful try to sort the list of all new prices. but didn't work
@@ -405,9 +400,18 @@
         }
         // when wishlist is open
         if (favouritesList) {
-            // .ListItem_details__1MxDE: is class of div element that contains the product name, details, id and price per piece
+            // .ProductCard_productCard__ARvOv: is class of div element that contains each the product name, details, id and price per piece
             // only when those details are available, then we know all data(items of wishlist) are loaded
             waitForKeyElements(".ProductCard_productCard__ARvOv", getPriceForEachItemOnWishlistAfterLoad);
+
+            // event when click to switch between online and in-store. the sum of countries need to be resetted. otherwise it will be added again
+            waitForKeyElements('button.ListSwitch_wrapper__r1bNq', (elem) => {
+                elem.on("click", function(param) {
+                    if (param?.target?.dataset?.testid == "in-store-online") {
+                        resetSumValues();
+                    }
+                })
+            })
         }
     }
 
@@ -420,19 +424,19 @@
             // get price and print it for every country in list
             for (const country of countriesToCheck) {
 
-                // // only for the first time, (after the lements are loaded) create the sum entry on the right
-                // if (counters[country.countryCode] == 0) {
-                //     // find element which contains the text 'Normalpreis'
-                //     jQuery('div.ListSummary_summary__XGLHQ > :nth-last-child(3)')
-                //         .after('<div style="' + sumPriceCountryContainer + '">\
-                //     <span>Normalpreis '+ country.name + '</span>\
-                //     <span><span style="'+ sumPriceCountryPriceContainer + '"><span>\
-                //     <span style="'+ sumPriceCountryPriceContainerCurrency + '">€</span>\
-                //     <span class="sum'+ country.countryCode + '" style="' + sumPriceCountryPriceContainerPrice + '">0</span>\
-                //     </span></span></span>\
-                //     </div>');
-                // }
-                // counters[country.countryCode]++;
+                // only for the first time, (after the lements are loaded) create the sum entry on the right
+                if (counters[country.countryCode] == 0) {
+                    // find element which contains the text 'Normalpreis'
+                    jQuery('div.PriceSummary_wrapper__B3uv_ > :last-child')
+                        .after('<div style="' + sumPriceCountryContainer + '">\
+                    <span>Normalpreis '+ country.name + '</span>\
+                    <span><span style="'+ sumPriceCountryPriceContainer + '"><span>\
+                    <span style="'+ sumPriceCountryPriceContainerCurrency + '">€</span>\
+                    <span class="sum'+ country.countryCode + '" style="' + sumPriceCountryPriceContainerPrice + '">0</span>\
+                    </span></span></span>\
+                    </div>');
+                }
+                counters[country.countryCode]++;
                 doo(divElementProductInfos, productId, counters[country.countryCode], country);
             }
         } else {
@@ -442,32 +446,37 @@
 
     async function doo(element, productId, counter, country) {
         var otherPrice = await getPriceFromOtherCountryAsync(country.countryCode, country.lang, productId, backupResponse.rates[country?.exchangeRateReference]);
-        console.log('otherPrice', country, otherPrice?.priceData);
-        var quantity = 1;
-        // var customSelector = '.customElementIkeaPrices' + counter;
+        var customSelector = '.customElementIkeaPrices' + counter;
 
-        // // want the information of how many of this product are saved in the list
-        // // the number currenlty is 2 siblings after current element or at the end before we add our custom div elements
-        // // #root > main > div > div > div:nth-child(2) > div > div.ListContainer_listContainer__1QeiA.grid-gap > ul:nth-child(4) > li:nth-child(1) > div.ListItem_controls__jR0ZV
-        // // jQuery explained: from the current element, which is the infos of one item, get the siblings, last one, then div, div, input
-        // var quantity = jQuery(' ~ div:last-child > div > div > input', element)[0].value;
-        // quantity = parseFloat(quantity) ? parseFloat(quantity) : 0;
-        // otherPrice.priceData.quantity = quantity;
+        // want the information of how many of this product are saved in the list
+        var quantity = jQuery('div > input', element)[0].value;
+        quantity = parseFloat(quantity) ? parseFloat(quantity) : 0;
+        otherPrice.priceData.quantity = quantity;
 
-        // // place the custom element after the last div of this list's entry. both selectors work fine
-        // jQuery('ul > li:nth-last-child(2)', element)
-        //     .after('<li class="' + customSelector.slice(1) + '"> \
-        //     <span><a href="'+ otherPrice?.priceData?.link + '">' + country.name + '</a>' + (otherPrice?.priceData?.exchangeText) + ' je: </span>\
-        //     <span class="">€ '+ otherPrice?.priceData?.price + '</span> \
-        //     </li>');
+        // calculate the actual price now, because just the total price is shown, no price per product anymore
+        if (otherPrice.priceData?.price) {
+            otherPrice.priceData.price = parseFloat(otherPrice?.priceData?.price * quantity).toFixed(2);
+        }
+        printNewPriceFavorites(country.name, otherPrice, jQuery('button.list-ingka-rating', element));
+        
+        
+        // total price of the whole list
+        sums[country.countryCode] = (parseFloat(otherPrice?.priceData?.price)) ? sums[country.countryCode] + parseFloat(otherPrice?.priceData?.price) : sums[country.countryCode];
+        var viewValue = sums[country.countryCode] == 0 ? "n.a." : sums[country.countryCode].toFixed(2)
+        jQuery('.sum' + country.countryCode)[0].innerText = viewValue;
+    }
 
-        // // total price on the right side
-        // jQuery('+ div > :nth-last-child(2)', element).after('<span>' + country.countryCode + ': € ' + parseFloat(otherPrice?.priceData?.price * quantity).toFixed(2) + '</span>');
+    function resetSumValues() {
+        for (const country of countriesToCheck) {
+            // sum of all items on wishlist including their selected quantitiy
+            sums[country.countryCode] = 0;
 
-        sums[country.countryCode] = (parseFloat(otherPrice?.priceData?.price)) ? sums[country.countryCode] + (parseFloat(otherPrice?.priceData?.price) * quantity) : sums[country.countryCode];
-        // jQuery('.sum' + country.countryCode)[0].innerText = sums[country.countryCode].toFixed(2);
-
-        console.log('sums', country, sums)
+            // count elements on wishlist
+            // only for the first time, set an init value
+            if (!counters[country.countryCode]) {
+                counters[country.countryCode] = 0;
+            }
+        }
     }
 
     function getExchangeRates() {
@@ -601,7 +610,7 @@
         });
     }
 
-    function printNewPrice(country, productData, customSelector) {
+    function printNewPriceProductPage(countryName, productData, customSelector) {
         var priceData = productData.priceData;
         var urlOtherIkea = priceData?.link;
         if (priceData?.price) {
@@ -610,7 +619,7 @@
             jQuery(customSelector).show();
             jQuery(customSelector).append('<div style="' + priceWrapperStyle + '">' +
                 '<div style="' + priceContentLeftStyle + '">' +
-                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + country +
+                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + countryName +
                 '</a>' + exchangeText + '<span></div>' +
                 '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
                 '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
@@ -623,7 +632,37 @@
             jQuery(customSelector + 'NA').show();
             jQuery(customSelector + 'NA').append('<div style="' + priceWrapperStyle + '">' +
                 '<div style="' + priceContentLeftStyle + '">' +
-                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + country +
+                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + countryName +
+                '</a><span></div>' +
+                '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
+                '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
+                '<span style="vertical-align: text-bottom;">n.a.</span>' +
+                '</span></div></div></div>');
+        }
+    }
+
+    function printNewPriceFavorites(countryName, productData, customSelector) {
+        var priceData = productData.priceData;
+        var urlOtherIkea = priceData?.link;
+        jQuery(customSelector).show();
+        if (priceData?.price) {
+            var price = priceData.price;
+            var exchangeText = priceData.exchangeText;
+            jQuery(customSelector).after('<div style="' + priceWrapperStyle + '">' +
+                '<div style="' + priceContentLeftStyle + '">' +
+                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + countryName +
+                '</a>' + exchangeText + '<span></div>' +
+                '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
+                '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
+                '<span style="margin-right: 0.0625rem; font-size: 0.625rem; vertical-align: text-top;">€ </span>' +
+                '<span style="font-size: 1rem; vertical-align: text-bottom;">' + price.split(".")[0] + '</span>' +
+                '<span style="font-size: 0.625rem; vertical-align: text-top; margin-left: .0625rem;">,' + price.split(".")[1] +
+                '</span>' +
+                '</span></div></div></div>');
+        } else {
+            jQuery(customSelector).after('<div style="' + priceWrapperStyle + '">' +
+                '<div style="' + priceContentLeftStyle + '">' +
+                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + countryName +
                 '</a><span></div>' +
                 '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
                 '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
