@@ -351,7 +351,7 @@
                     jQuery('div.PriceSummary_wrapper__B3uv_ > :last-child')
                         .after('<div style="' + sumPriceCountryContainer + '">\
                     <span>Normalpreis '+ country.name + '</span>\
-                    <span><span style="'+ sumPriceCountryPriceContainer + '"><span>\
+                    <span><span style="color:red!important">Preis enthält möglicherweise nicht alle Produkte</span><span style="'+ sumPriceCountryPriceContainer + '"><span>\
                     <span style="'+ sumPriceCountryPriceContainerCurrency + '">€</span>\
                     <span class="sum'+ country.countryCode + '" style="' + sumPriceCountryPriceContainerPrice + '">0</span>\
                     </span></span></span>\
