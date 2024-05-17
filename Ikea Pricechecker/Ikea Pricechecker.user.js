@@ -250,14 +250,38 @@
         style.appendChild(document.createTextNode(css));
     }
 
-    var url = window.location.href;
-    var productID = url.match(/\w*\d{8}/g);
-    var favouritesList = url.match(/.*\/favourites\/.*/g);
-    var counters = [];
-    var sums = [];
-    resetSumValues();
+    var productID, favouritesList, counters, sums;
+    // this url will not work for wishlist, because it's some sort of single page
+    runDefaultWebsite();
 
-    main();
+    // need to recognize when navigated to a new page and check the script again. wishlist will not work without it. probably because its some sort of a sub singel page.
+    window.navigation.addEventListener("navigate", (event) => {
+        // checks here too for the favourites url
+        var isFavouritesWishlist = event.destination.url.match(/.*\/favourites\/.+/g);
+        // ignore event traverse. when going back in history, both traverse and replace are called.
+        if ((event.navigationType == 'push' || event.navigationType == 'replace') && isFavouritesWishlist) {
+            favouritesList = isFavouritesWishlist;
+            runFavouritesWebsite();
+        }
+    })
+
+    function runDefaultWebsite(){
+        productID = window.location.href.match(/\w*\d{8}/g);
+        // is needed for when a specific wishlist is opened directlly.
+        favouritesList = window.location.href.match(/.*\/favourites\/.+/g);
+        counters = [];
+        sums = [];
+        resetSumValues();
+
+        main();
+    }
+
+    function runFavouritesWebsite() {
+        counters = [];
+        sums = [];
+        resetSumValues();
+        main();
+    }
 
     async function main() {
         // when product page is open
@@ -266,7 +290,7 @@
             // find title, description, price and stars
             jQuery('.js-price-package')
                 .after('<div class=' + customSelector.slice(1) +
-                    ' style="' + priceGroupStyle + ' display:none; /*border-bottom: 1px solid #dfdfdf; padding:10px 0;*/"></div>');
+                    ' style="' + priceGroupStyle + ' display:none;"></div>');
             jQuery(customSelector).after('<div class="' + customSelector.slice(1) + 'NA" style="' + priceGroupStyle + ' display:none;"></div>');
 
             productID = productID.toString().toUpperCase();
@@ -299,7 +323,7 @@
                 // get new price from other country
                 var countryPriceDate = await getPriceFromOtherCountryAsync(country.countryCode, country.lang, productID, country?.exchangeRateReference);
                 // print the price on the website
-                printNewPriceProductPage(country.name, countryPriceDate, customSelector);
+                printNewPrice(country.name, countryPriceDate, customSelector);
             }
 
             // this was an unsuccessful try to sort the list of all new prices. but didn't work
@@ -341,7 +365,11 @@
         // each element in the "list" has the id of the product in the html elements property data.testid="item-12345678"
         var productId = divElementProductInfos[0]?.dataset?.testid?.match(/(?<=item-)\d{8}$/g)[0];
         if (productId) {
-        
+            var customSelector = '.customElementIkeaPricesPerProduct'+ productId;
+            jQuery('button.list-ingka-rating', divElementProductInfos)
+                .after('<div class=' + customSelector.slice(1) + ' style="' + priceGroupStyle + ' display:none;"></div>');
+            jQuery(customSelector).after('<div class="' + customSelector.slice(1) + 'NA" style="' + priceGroupStyle + ' display:none;"></div>');
+
             // get price and print it for every country in list
             for (const country of countriesToCheck) {
 
@@ -358,14 +386,14 @@
                     </div>');
                 }
                 counters[country.countryCode]++;  // might not be needed anymore
-                doo(divElementProductInfos, productId, country);
+                doo(divElementProductInfos, productId, country, customSelector);
             }
         } else {
             console.log('no id found. it seems the first 4 hits are placeholder while the real items are loading. element', divElementProductInfos);
         }
     }
 
-    async function doo(element, productId, country) {
+    async function doo(element, productId, country, customElementIkeaPricesPerProduct) {
         var otherPrice = await getPriceFromOtherCountryAsync(country.countryCode, country.lang, productId, backupResponse.rates[country?.exchangeRateReference]);
 
         // want the information of how many of this product are saved in the list
@@ -377,7 +405,7 @@
         if (otherPrice.priceData?.price) {
             otherPrice.priceData.price = parseFloat(otherPrice?.priceData?.price * quantity).toFixed(2);
         }
-        printNewPriceFavorites(country.name, otherPrice, jQuery('button.list-ingka-rating', element));
+        printNewPrice(country.name, otherPrice, customElementIkeaPricesPerProduct);
         
         // total price of the whole list
         sums[country.countryCode] = (parseFloat(otherPrice?.priceData?.price)) ? sums[country.countryCode] + parseFloat(otherPrice?.priceData?.price) : sums[country.countryCode];
@@ -521,7 +549,7 @@
         });
     }
 
-    function printNewPriceProductPage(countryName, productData, customSelector) {
+    function printNewPrice(countryName, productData, customSelector) {
         var priceData = productData.priceData;
         var urlOtherIkea = priceData?.link;
         if (priceData?.price) {
@@ -542,36 +570,6 @@
         } else {
             jQuery(customSelector + 'NA').show();
             jQuery(customSelector + 'NA').append('<div style="' + priceWrapperStyle + '">' +
-                '<div style="' + priceContentLeftStyle + '">' +
-                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + countryName +
-                '</a><span></div>' +
-                '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
-                '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
-                '<span style="vertical-align: text-bottom;">n.a.</span>' +
-                '</span></div></div></div>');
-        }
-    }
-
-    function printNewPriceFavorites(countryName, productData, customSelector) {
-        var priceData = productData.priceData;
-        var urlOtherIkea = priceData?.link;
-        jQuery(customSelector).show();
-        if (priceData?.price) {
-            var price = priceData.price;
-            var exchangeText = priceData.exchangeText;
-            jQuery(customSelector).after('<div style="' + priceWrapperStyle + '">' +
-                '<div style="' + priceContentLeftStyle + '">' +
-                '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + countryName +
-                '</a>' + exchangeText + '<span></div>' +
-                '<div style="' + priceWrapperStyle + '"><div style="' + pricePriceGroup + '">' +
-                '<span style="' + pricePriceGroupSpan + '" style="font-weight: normal;">' +
-                '<span style="margin-right: 0.0625rem; font-size: 0.625rem; vertical-align: text-top;">€ </span>' +
-                '<span style="font-size: 1rem; vertical-align: text-bottom;">' + price.split(".")[0] + '</span>' +
-                '<span style="font-size: 0.625rem; vertical-align: text-top; margin-left: .0625rem;">,' + price.split(".")[1] +
-                '</span>' +
-                '</span></div></div></div>');
-        } else {
-            jQuery(customSelector).after('<div style="' + priceWrapperStyle + '">' +
                 '<div style="' + priceContentLeftStyle + '">' +
                 '<span><a style="' + priceCountryLink + '" target="_blank" rel="noopener noreferrer" href="' + urlOtherIkea + '">Ikea ' + countryName +
                 '</a><span></div>' +
