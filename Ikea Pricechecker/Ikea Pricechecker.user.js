@@ -205,80 +205,6 @@
     box-sizing: inherit; \
     outline: none;";
 
-    // // .hnf-link
-    // var priceSortingBtn1 = " text-decoration: underline; \
-    // font-weight: 400; \
-    // color: rgb(var(--colour-text-and-icon-2, 72, 72, 72)); ";
-    // // .hnf-link:focus,.hnf-link:hover,.hnf-link:active {
-    // //     color: rgb(var(--colour-text-and-icon-1, 17, 17, 17))
-    // // }
-    // // .hnf-btn
-    // var priceSortingBtn2 = "    position: relative; \
-    // font-size: .875rem; \
-    // background: none; \
-    // border: 0; \
-    // padding: 0; \
-    // line-height: 1.4285714286; \
-    // font-weight: bold; \
-    // text-align: center; \
-    // display: inline-flex; \
-    // border-radius: 64px; \
-    // cursor: pointer; \
-    // outline: 0; \
-    // vertical-align: top; ";
-    // // .hnf-btn:hover,.hnf-btn:active,.hnf-btn:focus {
-    // //     text-decoration: none
-    // // }
-    // // .hnf-btn-change-country
-    // var priceSortingBtn3 = " display: inline-block; \
-    // color: rgb(var(--colour-text-and-icon-2, 72, 72, 72)); \
-    // padding: .625rem 1.25rem .625rem 1.25rem; \
-    // border-radius: 20px; \
-    // border: 1px solid rgb(var(--colour-neutral-3, 223, 223, 223)); \
-    // font-size: .75rem; \
-    // font-weight: 700; \
-    // line-height: 1.5; \
-    // white-space: nowrap; \
-    // text-decoration: none; \
-    // width: 100%; \
-    // text-align: center; ";
-
-    // // display: inline-block;  \
-    // // border: 1px solid rgb(var(--colour-neutral-3, 223, 223, 223)); \
-    // // padding: .625rem 1.25rem .625rem 1.25rem;  \
-    // var sortButton99 = "background: none;  \
-    // border-radius: 64px;  \
-    // box-sizing: border-box; \
-    // box-shadow: inset 0 0 0 1px rgb(var(--colour-neutral-7, 17, 17, 17)); \
-    // cursor: pointer; \
-    // font-size: .75rem;  \
-    // font-weight: 700;  \
-    // text-align: center;  \
-    // line-height: 1.3333333333;  \
-    // position: relative;  \
-    // text-decoration: none;  \
-    // width: 100%; \
-    // display: inline-flex; \
-    // justify-content: center; \
-    // align-items: center; \
-    // padding: 0 1.5rem; \
-    // min-height: 2.5rem; \
-    // "; 
-    
-    // var test99 = "border: 1px solid rgb(var(--colour-neutral-3, 223, 223, 223));  \
-    // rgb(var(--colour-text-and-icon-1, 17, 17, 17)); \
-    // cursor: pointer;  \
-    // font-weight: 400;  \
-    // font-weight: bold;  \
-    // outline: 0;  \
-    // vertical-align: top; \
-    // white-space: nowrap;  \
-    //  ";
-
-    // var sortButtonHover = " onmouseover=\"this.style.boxShadow=\'inset 0 0 0 2px rgb(var(--colour-neutral-7, 17, 17, 17))\'\" onmouseout=\"this.style.boxShadow=\'inset 0 0 0 1px rgb(var(--colour-neutral-7, 17, 17, 17))\'\" ";
-
-
-    // box-shadow: inset 0 0 0 1px rgb(var(--colour-neutral-7, 17, 17, 17)); \
     // add style for button to sort, was .hnf-link .hnf-btn .hnf-btn-change-country
     var css = '.janSortButton { \
         background: none;  \
@@ -317,14 +243,12 @@
     head = document.head || document.getElementsByTagName('head')[0],
     style = document.createElement('style');
     head.appendChild(style);
-    style.type = 'text/css';
     if (style.styleSheet){
         // This is required for IE8 and below.
         style.styleSheet.cssText = css;
     } else {
         style.appendChild(document.createTextNode(css));
     }
-
 
     var url = window.location.href;
     var productID = url.match(/\w*\d{8}/g);
@@ -357,7 +281,7 @@
 
                 var newRatesResponse = xrResponse.response;
                 Object.keys(newRatesResponse.rates)
-                    .filter(property => !["CZK", "HRK", "HUF"].includes(property))
+                    .filter(property => !["CZK", "HUF"].includes(property))
                     .forEach(property => delete newRatesResponse.rates[property])
                 console.log('new rates (short)');
                 console.log("var backupResponse = JSON.parse('" + JSON.stringify(newRatesResponse) + "');");
@@ -387,11 +311,9 @@
             // create element for sort the prices
             jQuery(customSelector + 'NA').after('<div style="margin-top: 12px; padding: 0 0 1rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
                 '<div style="width: 50%; padding-right: 0.5rem; padding-left: 0.0rem;">' +
-                // '<a id="sortByPrice" style="' + sortButton99 + '" '+sortButtonHover+'>sortieren nach Preis</a>' +
                 '<a id="sortByPrice" class="janSortButton">sortieren nach Preis</a>' +
                 '</div>' +
                 '<div style="width: 50%; padding-right: 0.0rem; padding-left: 0.5rem;">' +
-                // '<a id="sortByCountry" style="' + sortButton99 + '" '+sortButtonHover+'>sortieren nach Land</a>' +
                 '<a id="sortByCountry" class="janSortButton">sortieren nach Land</a>' +
                 '</div>' +
                 '</div>');
@@ -419,7 +341,6 @@
         // each element in the "list" has the id of the product in the html elements property data.testid="item-12345678"
         var productId = divElementProductInfos[0]?.dataset?.testid?.match(/(?<=item-)\d{8}$/g)[0];
         if (productId) {
-            console.log('we have a id', productId)
         
             // get price and print it for every country in list
             for (const country of countriesToCheck) {
@@ -436,17 +357,16 @@
                     </span></span></span>\
                     </div>');
                 }
-                counters[country.countryCode]++;
-                doo(divElementProductInfos, productId, counters[country.countryCode], country);
+                counters[country.countryCode]++;  // might not be needed anymore
+                doo(divElementProductInfos, productId, country);
             }
         } else {
             console.log('no id found. it seems the first 4 hits are placeholder while the real items are loading. element', divElementProductInfos);
         }
     }
 
-    async function doo(element, productId, counter, country) {
+    async function doo(element, productId, country) {
         var otherPrice = await getPriceFromOtherCountryAsync(country.countryCode, country.lang, productId, backupResponse.rates[country?.exchangeRateReference]);
-        var customSelector = '.customElementIkeaPrices' + counter;
 
         // want the information of how many of this product are saved in the list
         var quantity = jQuery('div > input', element)[0].value;
@@ -458,7 +378,6 @@
             otherPrice.priceData.price = parseFloat(otherPrice?.priceData?.price * quantity).toFixed(2);
         }
         printNewPriceFavorites(country.name, otherPrice, jQuery('button.list-ingka-rating', element));
-        
         
         // total price of the whole list
         sums[country.countryCode] = (parseFloat(otherPrice?.priceData?.price)) ? sums[country.countryCode] + parseFloat(otherPrice?.priceData?.price) : sums[country.countryCode];
@@ -514,14 +433,6 @@
         });
         parent.append(items);
     };
-
-    // function getNameFromLink(x) {
-    //     return x.text.split(":")[0];
-    // }
-
-    // function getPriceFromLink(x) {
-    //     return x.text.split("€")[1].substring(1, 6);
-    // }
 
     // function sortUsingNestedText(parent, childSelector, formatter) {
     //     console.log('children', parent.children(childSelector));
