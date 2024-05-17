@@ -15,16 +15,23 @@
 // @grant    GM_addStyle
 // ==/UserScript==
 
-// TODO-1: if a product contains multiple pieces, script breaks. Also these type of products have multiple "price-module__addons". 
+// PRIO highest priority tasks for major functional bugs or features
+// PRIO-1: if a product contains multiple pieces, script breaks. Also these type of products have multiple "price-module__addons". 
 //      1. need to detect if a product has a "family price"
 //      2. need to detect if a product contains multiple pieces. if so, then just get the regular price
 //      3. need 1. and 2. to work together. If a product has a family price and contains multiple pieces.
-// TODO-2: bug in wishlist: when selecting to check availability in store, not online, quantity cannot be found. error at column 310
-// TODO-3: add availability for single product and for each items in wishlist. see comments get api.ingka.ikea.com
-// TODO-4: single product page: sort prices auto after all infos are loaded
-// TODO-5: wishlist: add buttons to sort the prices of other countries like on single product page
-// TODO-6: wishlist: sort prices auto after all infos are loaded
-// TODO-7: wishlist: if a product is not available in a country, mark it in the aggregated result. maybe make the font-color of the country's sum red and when hovering over, open a info tooltip
+// PRIO-2: wishlist: if a product is not available in a country, mark it in the aggregated result. maybe make the font-color of the country's sum red and when hovering over, open a info tooltip
+
+// NICE to have features
+// NICE-1: create css classes for all inline styles and just reference the classes
+// NICE-2: wishlist: add availability for single product and for each items in wishlist. see comments get api.ingka.ikea.com
+// NICE-3: single product page: sort prices auto after all infos are loaded
+
+// TRIV trivial errors that should at some point be resolved
+// TRIV-1: bug in wishlist: when selecting to check availability in store, not online, quantity cannot be found. error at column 310
+// TRIV-2: wishlist: add buttons to sort the prices of other countries like on single product page
+// TRIV-3: wishlist: sort prices auto after all infos are loaded
+
 
 (function () {
     'use strict';
@@ -544,7 +551,7 @@
                     // console.log('addon price ', jQuery('.pip-temp-price-module__addons > .pip-temp-price__sr-text', jQuery(responseDetails.responseText)))
                     // console.log('regular price ', jQuery('.pip-temp-price-module__price > .pip-temp-price__sr-text', jQuery(responseDetails.responseText)))
                     
-                    // TODO-1 disabled the family price for now, because it breaks if a product contains multiple pieces. Then a product also contains price-module__addons to show the price each.
+                    // PRIO-1 disabled the family price for now, because it breaks if a product contains multiple pieces. Then a product also contains price-module__addons to show the price each.
                     // var priceDiv;
                     // var priceDivAddon = jQuery('.pip-temp-price-module__addons', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text');
                     // if (priceDivAddon.length != 0) {
