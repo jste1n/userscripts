@@ -52,7 +52,13 @@
         { name: 'Tschechien', countryCode: 'CZ', lang: 'cs', exchangeRateReference: 'CZK' },
         { name: 'Ungarn', countryCode: 'HU', lang: 'hu', exchangeRateReference: 'HUF' },
         { name: 'Kroatien', countryCode: 'HR', lang: 'hr' }
-    ];
+    ].sort((a, b) => {
+        const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0; // names must be equal
+    });
 
     // original class: range-revamp-pip-price-package, then pip-pip-price-package, then ?
     var priceGroupStyle = "-webkit-text-size-adjust: 100%;\
@@ -358,12 +364,6 @@
                 printNewPrice(country.name, countryPriceDate, customSelector);
             }
 
-            // this was an unsuccessful try to sort the list of all new prices. but didn't work
-            // setTimeout(function () {
-            //     sortIkeas(getFancyTextPrice);
-            //     console.log('timeout done');
-            // }, 1000);
-
             // create element for sort the prices
             jQuery(customSelector + 'NA').after('<div style="margin-top: 12px; padding: 0 0 1rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: horizontal; -webkit-box-direction: normal; -ms-flex-direction: row; flex-direction: row; flex-wrap: wrap;">' +
                 '<div style="width: 50%; padding-right: 0.5rem; padding-left: 0.0rem;">' +
@@ -507,22 +507,18 @@
         var items = parent.children().sort(function (a, b) {
             var vA = formatter(a.innerText);
             var vB = formatter(b.innerText);
-            return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+            if (isNumber(vA) && isNumber(vB)) {
+                return (+vA < +vB) ? -1 : (+vA > +vB) ? 1 : 0;
+            } else {
+                return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+            }
         });
         parent.append(items);
     };
 
-    // function sortUsingNestedText(parent, childSelector, formatter) {
-    //     console.log('children', parent.children(childSelector));
-    //     var items = parent.children(childSelector).sort(function (a, b) {
-    //         var vA = formatter(a);
-    //         console.log('check a', a);
-    //         console.log('formatted', vA);
-    //         var vB = formatter(b);
-    //         return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
-    //     });
-    //     parent.append(items);
-    // };
+    function isNumber(n) {
+        return !isNaN(parseFloat(n)) && !isNaN(n - 0);
+    }
 
     function getPriceFromOtherCountryAsync(countryCode, lang, productID, exchangeRate = 1) {
         return new Promise(function (resolve) {
@@ -628,6 +624,8 @@
                 '<span style="vertical-align: text-bottom;">n.a.</span>' +
                 '</span></div></div></div>');
         }
+        sortIkeas(getFancyTextCountry, customSelector);
+        sortIkeas(getFancyTextCountry, customSelector + 'NA');
     }
 
 })();
