@@ -277,11 +277,11 @@
       .tooltip:hover .tooltiptext { \
         visibility: visible; \
       } \
-     ', 
-    head = document.head || document.getElementsByTagName('head')[0],
-    style = document.createElement('style');
+     ',
+        head = document.head || document.getElementsByTagName('head')[0],
+        style = document.createElement('style');
     head.appendChild(style);
-    if (style.styleSheet){
+    if (style.styleSheet) {
         // This is required for IE8 and below.
         style.styleSheet.cssText = css;
     } else {
@@ -303,7 +303,7 @@
         }
     })
 
-    function runDefaultWebsite(){
+    function runDefaultWebsite() {
         productID = window.location.href.match(/\w*\d{8}/g);
         // is needed for when a specific wishlist is opened directlly.
         favouritesList = window.location.href.match(/.*\/favourites\/.+/g);
@@ -384,7 +384,7 @@
 
             // event when click to switch between online and in-store. the sum of countries need to be resetted. otherwise it will be added again
             waitForKeyElements('button.ListSwitch_wrapper__r1bNq', (elem) => {
-                elem.on("click", function(param) {
+                elem.on("click", function (param) {
                     if (param?.target?.dataset?.testid == "in-store-online") {
                         resetSumValues();
                     }
@@ -397,7 +397,7 @@
         // each element in the "list" has the id of the product in the html elements property data.testid="item-12345678"
         var productId = divElementProductInfos[0]?.dataset?.testid?.match(/(?<=item-)\d{8}$/g)[0];
         if (productId) {
-            var customSelector = '.customElementIkeaPricesPerProduct'+ productId;
+            var customSelector = '.customElementIkeaPricesPerProduct' + productId;
             jQuery('button.list-ingka-rating', divElementProductInfos)
                 .after('<div class=' + customSelector.slice(1) + ' style="' + priceGroupStyle + ' display:none;"></div>');
             jQuery(customSelector).after('<div class="' + customSelector.slice(1) + 'NA" style="' + priceGroupStyle + ' display:none;"></div>');
@@ -412,8 +412,8 @@
                         .after('<div style="' + sumPriceCountryContainer + '">\
                     <span>Normalpreis '+ country.name + '</span>\
                     <span>\
-                        <span id="priceMissingDisclaimer'+country.name+'" style="color:red!important; display:none;" class="tooltip">Preis enthält möglicherweise nicht alle Produkte\
-                            <span class="tooltiptext" id="priceMissingDisclaimerTooltip'+country.name+'" style="display:none;">Fehlen:</span>\
+                        <span id="priceMissingDisclaimer'+ country.name + '" style="color:red!important; display:none;" class="tooltip">Preis enthält möglicherweise nicht alle Produkte\
+                            <span class="tooltiptext" id="priceMissingDisclaimerTooltip'+ country.name + '" style="display:none;">Fehlen:</span>\
                         </span>\
                         <span style="'+ sumPriceCountryPriceContainer + '">\
                             <span>\
@@ -445,7 +445,7 @@
             otherPrice.priceData.price = parseFloat(otherPrice?.priceData?.price * quantity).toFixed(2);
         }
         printNewPrice(country.name, otherPrice, customElementIkeaPricesPerProduct);
-        
+
         // total price of the whole list
         var price = parseFloat(otherPrice?.priceData?.price);
         // if no price, add disclaimer and tooltip
@@ -453,9 +453,9 @@
             sums[country.countryCode] = sums[country.countryCode] + price;
         } else {
             sums[country.countryCode] = sums[country.countryCode];
-            jQuery(('#priceMissingDisclaimer'+country.name)).show();
-            
-            var tooltip = jQuery(('#priceMissingDisclaimerTooltip'+country.name));
+            jQuery(('#priceMissingDisclaimer' + country.name)).show();
+
+            var tooltip = jQuery(('#priceMissingDisclaimerTooltip' + country.name));
             tooltip.show();
             tooltip[0].innerHTML = tooltip[0].innerHTML + "<br>" + productId;
         }
@@ -544,7 +544,7 @@
                     // console.log('regular price ', jQuery('.pip-temp-price-module__price', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text'))
                     // console.log('addon price ', jQuery('.pip-temp-price-module__addons > .pip-temp-price__sr-text', jQuery(responseDetails.responseText)))
                     // console.log('regular price ', jQuery('.pip-temp-price-module__price > .pip-temp-price__sr-text', jQuery(responseDetails.responseText)))
-                    
+
                     // PRIO-1 disabled the family price for now, because it breaks if a product contains multiple pieces. Then a product also contains price-module__addons to show the price each.
                     // var priceDiv;
                     // var priceDivAddon = jQuery('.pip-temp-price-module__addons', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text');
