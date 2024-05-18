@@ -239,7 +239,39 @@
      } \
      .janSortButton:active:not(:disabled) { \
         transform: scale(0.97); \
-     } ', 
+     }\
+     .tooltip { \
+        position: relative; \
+        display: inline-block; \
+      } \
+      .tooltip .tooltiptext { \
+        visibility: hidden; \
+        width: 120px; \
+        background-color: black; \
+        color: #fff; \
+        text-align: center; \
+        border-radius: 6px; \
+        padding: 5px 0; \
+        position: absolute; \
+        z-index: 1; \
+        bottom: 100%; \
+        left: 50%; \
+        margin-left: -60px; \
+      } \
+      .tooltip .tooltiptext::after { \
+        content: ""; \
+        position: absolute; \
+        top: 100%; \
+        left: 50%; \
+        margin-left: -5px; \
+        border-width: 5px; \
+        border-style: solid; \
+        border-color: black transparent transparent transparent; \
+      } \
+      .tooltip:hover .tooltiptext { \
+        visibility: visible; \
+      } \
+     ', 
     head = document.head || document.getElementsByTagName('head')[0],
     style = document.createElement('style');
     head.appendChild(style);
@@ -379,10 +411,17 @@
                     jQuery('div.PriceSummary_wrapper__B3uv_ > :last-child')
                         .after('<div style="' + sumPriceCountryContainer + '">\
                     <span>Normalpreis '+ country.name + '</span>\
-                    <span><span style="color:red!important">Preis enthält möglicherweise nicht alle Produkte</span><span style="'+ sumPriceCountryPriceContainer + '"><span>\
-                    <span style="'+ sumPriceCountryPriceContainerCurrency + '">€</span>\
-                    <span class="sum'+ country.countryCode + '" style="' + sumPriceCountryPriceContainerPrice + '">0</span>\
-                    </span></span></span>\
+                    <span>\
+                        <span id="priceMissingDisclaimer'+country.name+'" style="color:red!important; display:none;" class="tooltip">Preis enthält möglicherweise nicht alle Produkte\
+                            <span class="tooltiptext" id="priceMissingDisclaimerTooltip'+country.name+'" style="display:none;">Fehlen:</span>\
+                        </span>\
+                        <span style="'+ sumPriceCountryPriceContainer + '">\
+                            <span>\
+                                <span style="'+ sumPriceCountryPriceContainerCurrency + '">€</span>\
+                                <span class="sum'+ country.countryCode + '" style="' + sumPriceCountryPriceContainerPrice + '">0</span>\
+                            </span>\
+                        </span>\
+                    </span>\
                     </div>');
                 }
                 counters[country.countryCode]++;  // might not be needed anymore
@@ -408,8 +447,19 @@
         printNewPrice(country.name, otherPrice, customElementIkeaPricesPerProduct);
         
         // total price of the whole list
-        sums[country.countryCode] = (parseFloat(otherPrice?.priceData?.price)) ? sums[country.countryCode] + parseFloat(otherPrice?.priceData?.price) : sums[country.countryCode];
-        var viewValue = sums[country.countryCode] == 0 ? "n.a." : sums[country.countryCode].toFixed(2)
+        var price = parseFloat(otherPrice?.priceData?.price);
+        // if no price, add disclaimer and tooltip
+        if (price) {
+            sums[country.countryCode] = sums[country.countryCode] + price;
+        } else {
+            sums[country.countryCode] = sums[country.countryCode];
+            jQuery(('#priceMissingDisclaimer'+country.name)).show();
+            
+            var tooltip = jQuery(('#priceMissingDisclaimerTooltip'+country.name));
+            tooltip.show();
+            tooltip[0].innerHTML = tooltip[0].innerHTML + "<br>" + productId;
+        }
+        var viewValue = sums[country.countryCode] == 0 ? "n.a." : sums[country.countryCode].toFixed(2);
         jQuery('.sum' + country.countryCode)[0].innerText = viewValue;
     }
 
