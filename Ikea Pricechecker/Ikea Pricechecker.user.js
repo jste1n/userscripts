@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Ikea Pricechecker
 // @namespace    http://tampermonkey.net/
-// @version      1.1.2
-// @description  forked from Tiuz https://pastebin.com/5qkwpVvV - Vergleicht die Preise auf der österreichischen Ikea Seite mit den Preisen von IKEA SK/IT/CZ/HU/HR
+// @version      1.2.0
+// @description  Vergleicht die Preise auf der österreichischen Ikea Seite mit den Preisen von IKEA SK/IT/CZ/HU/HR
 // @author       JP Stoni
 // @match        https://www.ikea.com/at/*
 // @icon         https://www.ikea.com/at/de/static/favicon.838d8a3778e4d716eb72.ico
@@ -16,16 +16,24 @@
 // ==/UserScript==
 
 // PRIO highest priority tasks for major functional bugs or features
-// PRIO-2: wishlist: if a product is not available in a country, mark it in the aggregated result. maybe make the font-color of the country's sum red and when hovering over, open a info tooltip
 
 // NICE to have features
 // NICE-1: create css classes for all inline styles and just reference the classes
 // NICE-2: wishlist: add availability for single product and for each items in wishlist. see comments get api.ingka.ikea.com
-// NICE-3: single product page: sort prices auto after all infos are loaded
 
 // TRIV trivial errors that should at some point be resolved
-// TRIV-1: bug in wishlist: when selecting to check availability in store, not online, quantity cannot be found. error at column 310
+// TRIV-1: still relevant? bug in wishlist: when selecting to check availability in store, not online, quantity cannot be found. error at column 310
 // TRIV-2: wishlist: add buttons to sort the prices of other countries like on single product page
+
+
+// DONE
+// 1.2.0
+// PRIO-1: if a product contains multiple pieces, script breaks. Also these type of products have multiple "price-module__addons". 
+//      1. need to detect if a product has a "family price"
+//      2. need to detect if a product contains multiple pieces. if so, then just get the regular price
+//      3. need 1. and 2. to work together. If a product has a family price and contains multiple pieces.
+// PRIO-2: wishlist: if a product is not available in a country, mark it in the aggregated result. maybe make the font-color of the country's sum red and when hovering over, open a info tooltip
+// NICE-3: single product page: sort prices auto after all infos are loaded
 // TRIV-3: wishlist: sort prices auto after all infos are loaded
 
 
