@@ -16,10 +16,6 @@
 // ==/UserScript==
 
 // PRIO highest priority tasks for major functional bugs or features
-// PRIO-1: if a product contains multiple pieces, script breaks. Also these type of products have multiple "price-module__addons". 
-//      1. need to detect if a product has a "family price"
-//      2. need to detect if a product contains multiple pieces. if so, then just get the regular price
-//      3. need 1. and 2. to work together. If a product has a family price and contains multiple pieces.
 // PRIO-2: wishlist: if a product is not available in a country, mark it in the aggregated result. maybe make the font-color of the country's sum red and when hovering over, open a info tooltip
 
 // NICE to have features
@@ -45,6 +41,10 @@
     // {"success":true,"timestamp":1671317283,"base":"EUR","date":"2022-12-17","rates":{"AED":3.893055,"AFN":92.949045,"ALL":114.398825,"AMD":420.405682,"ANG":1.91668,"AOA":534.604039,"ARS":182.778523,"AUD":1.585549,"AWG":1.90789,"AZN":1.806104,"BAM":1.95581,"BBD":2.147378,"BDT":110.925061,"BGN":1.956374,"BHD":0.400896,"BIF":2202.977373,"BMD":1.059939,"BND":1.442985,"BOB":7.348925,"BRL":5.626709,"BSD":1.063489,"BTC":6.334929e-5,"BTN":88.060996,"BWP":13.811958,"BYN":2.684472,"BYR":20774.806624,"BZD":2.143778,"CAD":1.456728,"CDF":2154.856601,"CHF":0.987671,"CLF":0.034053,"CLP":931.695931,"CNY":7.391172,"COP":5098.447634,"CRC":632.393505,"CUC":1.059939,"CUP":28.088387,"CVE":110.263867,"CZK":24.258869,"DJF":189.328055,"DKK":7.447349,"DOP":58.818396,"DZD":145.523505,"EGP":26.126732,"ERN":15.899087,"ETB":56.924815,"EUR":1,"FJD":2.338336,"FKP":0.870912,"GBP":0.872809,"GEL":2.809253,"GGP":0.870912,"GHS":9.571702,"GIP":0.870912,"GMD":65.716602,"GNF":9164.305874,"GTQ":8.369914,"GYD":222.507715,"HKD":8.251524,"HNL":26.25073,"HRK":7.549739,"HTG":154.742411,"HUF":406.052486,"IDR":16551.956199,"ILS":3.671315,"IMP":0.870912,"INR":87.692477,"IQD":1552.224057,"IRR":43881.47967,"ISK":151.469344,"JEP":0.870912,"JMD":163.250323,"JOD":0.751819,"JPY":144.909618,"KES":130.866056,"KGS":90.042235,"KHR":4369.955117,"KMF":492.133754,"KPW":953.921202,"KRW":1388.478248,"KWD":0.325232,"KYD":0.886291,"KZT":496.5149,"LAK":18386.111158,"LBP":1608.283481,"LKR":390.843386,"LRD":163.230993,"LSL":18.740128,"LTL":3.129725,"LVL":0.641147,"LYD":5.126247,"MAD":11.150985,"MDL":20.589689,"MGA":4709.901625,"MKD":61.614367,"MMK":2233.390261,"MNT":3635.329341,"MOP":8.524712,"MRO":378.398081,"MUR":46.902707,"MVR":16.327028,"MWK":1091.601788,"MXN":20.972489,"MYR":4.689705,"MZN":67.656314,"NAD":18.740123,"NGN":472.171476,"NIO":38.828601,"NOK":10.491331,"NPR":140.897553,"NZD":1.664216,"OMR":0.409396,"PAB":1.063489,"PEN":4.075658,"PGK":3.795561,"PHP":58.858816,"PKR":239.158844,"PLN":4.691152,"PYG":7673.221189,"QAR":3.858974,"RON":4.920771,"RSD":117.478392,"RUB":68.763591,"RWF":1130.458389,"SAR":3.983315,"SBD":8.695299,"SCR":13.823858,"SDG":603.105715,"SEK":11.035666,"SGD":1.440355,"SHP":1.459964,"SLE":19.836972,"SLL":19815.562085,"SOS":603.105714,"SRD":33.522735,"STD":21938.59964,"SVC":9.305904,"SYP":2662.529272,"SZL":18.707808,"THB":36.931499,"TJS":10.842589,"TMT":3.720386,"TND":3.345433,"TOP":2.489744,"TRY":19.756527,"TTD":7.219126,"TWD":32.631078,"TZS":2482.254505,"UAH":39.085899,"UGX":3892.460021,"USD":1.059939,"UYU":41.099578,"UZS":11980.506949,"VEF":1646972.326076,"VES":16.484438,"VND":25019.862773,"VUV":125.692746,"WST":2.871138,"XAF":655.950263,"XAG":0.045658,"XAU":0.000591,"XCD":2.864539,"XDR":0.799192,"XOF":655.950263,"XPF":119.640667,"YER":265.306569,"ZAR":18.694687,"ZMK":9540.727752,"ZMW":18.813607,"ZWL":341.299962}}
     // {"success":true,"timestamp":1672358823,"base":"EUR","date":"2022-12-30","rates":{"AED":3.916522,"AFN":93.317645,"ALL":114.106751,"AMD":419.291122,"ANG":1.921871,"AOA":537.096921,"ARS":188.519435,"AUD":1.575657,"AWG":1.922216,"AZN":1.796072,"BAM":1.960511,"BBD":2.153141,"BDT":109.489493,"BGN":1.955067,"BHD":0.401974,"BIF":2198.950743,"BMD":1.066416,"BND":1.438068,"BOB":7.368595,"BRL":5.63718,"BSD":1.066346,"BTC":6.4143655e-5,"BTN":88.258633,"BWP":13.671217,"BYN":2.692128,"BYR":20901.762636,"BZD":2.149433,"CAD":1.445506,"CDF":2163.225322,"CHF":0.984457,"CLF":0.033102,"CLP":913.374635,"CNY":7.426629,"COP":5171.991866,"CRC":624.150388,"CUC":1.066416,"CUP":28.260036,"CVE":110.960854,"CZK":24.1949,"DJF":189.523407,"DKK":7.435962,"DOP":60.039202,"DZD":146.562962,"EGP":26.403195,"ERN":15.996247,"ETB":57.166657,"EUR":1,"FJD":2.344356,"FKP":0.886326,"GBP":0.884342,"GEL":2.878924,"GGP":0.886326,"GHS":10.663875,"GIP":0.886326,"GMD":66.064251,"GNF":9357.804684,"GTQ":8.368282,"GYD":223.11008,"HKD":8.31149,"HNL":26.313787,"HRK":7.537328,"HTG":156.756313,"HUF":399.767404,"IDR":16667.182832,"ILS":3.754799,"IMP":0.886326,"INR":88.336235,"IQD":1557.501241,"IRR":44629.528852,"ISK":151.889788,"JEP":0.886326,"JMD":162.18937,"JOD":0.756408,"JPY":141.725661,"KES":131.605171,"KGS":91.370189,"KHR":4390.43698,"KMF":492.260725,"KPW":959.792548,"KRW":1344.388579,"KWD":0.326505,"KYD":0.888655,"KZT":492.190671,"LAK":18496.993557,"LBP":1616.03994,"LKR":389.764315,"LRD":164.758245,"LSL":18.257301,"LTL":3.14885,"LVL":0.645065,"LYD":5.150822,"MAD":11.157385,"MDL":20.426275,"MGA":4764.749077,"MKD":61.74623,"MMK":2239.411617,"MNT":3654.405884,"MOP":8.560563,"MRO":380.710493,"MUR":46.965311,"MVR":16.433506,"MWK":1090.943936,"MXN":20.766338,"MYR":4.717297,"MZN":68.069403,"NAD":18.25708,"NGN":477.306819,"NIO":38.785169,"NOK":10.544038,"NPR":141.212846,"NZD":1.681179,"OMR":0.410627,"PAB":1.066346,"PEN":4.038552,"PGK":3.759101,"PHP":59.420502,"PKR":241.490174,"PLN":4.67515,"PYG":7836.18941,"QAR":3.883089,"RON":4.949672,"RSD":117.305514,"RUB":78.915029,"RWF":1137.866364,"SAR":4.009334,"SBD":8.81351,"SCR":14.116585,"SDG":610.521465,"SEK":11.15109,"SGD":1.432939,"SHP":1.468884,"SLE":20.085936,"SLL":20155.271442,"SOS":606.255473,"SRD":33.925965,"STD":22072.667657,"SVC":9.330586,"SYP":2679.411831,"SZL":18.2568,"THB":36.872947,"TJS":10.866145,"TMT":3.743122,"TND":3.331465,"TOP":2.503146,"TRY":19.955425,"TTD":7.246704,"TWD":32.728563,"TZS":2486.88298,"UAH":39.38254,"UGX":3960.51731,"USD":1.066416,"UYU":42.712591,"UZS":11970.524181,"VEF":1787896.666841,"VES":17.896334,"VND":25188.756809,"VUV":126.522529,"WST":2.893824,"XAF":657.542539,"XAG":0.044668,"XAU":0.000587,"XCD":2.882044,"XDR":0.801332,"XOF":657.979241,"XPF":119.75609,"YER":266.870481,"ZAR":18.065844,"ZMK":9599.019087,"ZMW":19.279938,"ZWL":343.385665}}
 
+    // if set to true, it will get the price using the family card of that country. 
+    // for that you need to have a card registered in that country, not austria.
+    // see https://www.ikea.com/at/de/customer-service/knowledge/articles/47g8f179-e981-4bg4-87f4-1811g2e91ff2.html
+    var useFamilyCard = false;
     var countriesToCheck = [
         { name: 'Slowakei', countryCode: 'SK', lang: 'sk' },
         { name: 'Italien', countryCode: 'IT', lang: 'it' },
@@ -539,25 +539,20 @@
                     // var priceDiv = jQuery('[class*="package__main-price"]', jQuery(responseDetails.responseText));
                     // get the price info text like "Cena € 54,90"
                     var responseObj = {};
-
-                    // console.log('addon price ', jQuery('.pip-temp-price-module__addons', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text').length)
-                    // console.log('regular price ', jQuery('.pip-temp-price-module__price', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text'))
-                    // console.log('addon price ', jQuery('.pip-temp-price-module__addons > .pip-temp-price__sr-text', jQuery(responseDetails.responseText)))
-                    // console.log('regular price ', jQuery('.pip-temp-price-module__price > .pip-temp-price__sr-text', jQuery(responseDetails.responseText)))
-
-                    // PRIO-1 disabled the family price for now, because it breaks if a product contains multiple pieces. Then a product also contains price-module__addons to show the price each.
-                    // var priceDiv;
-                    // var priceDivAddon = jQuery('.pip-temp-price-module__addons', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text');
-                    // if (priceDivAddon.length != 0) {
-                    //     console.log('family price exists for country', countryCode);
-                    //     priceDiv = priceDivAddon;
-                    // } else {
-                    //     priceDiv = jQuery('.pip-temp-price-module__price', jQuery(responseDetails.responseText)).find('.pip-temp-price__sr-text')
-                    // }
                     var priceDiv = jQuery('.pip-temp-price__sr-text', jQuery(responseDetails.responseText));
+                    if (priceDiv.length > 0) {  // got some price data
+                        if (priceDiv.length > 1) {  // got the regular and ikea family price
+                            priceDiv = useFamilyCard ? priceDiv[0] : priceDiv[1];
+                        } else {  // when only 1 price is received
+                            priceDiv = priceDiv[0];
+                        }
+                    } else {
+                        priceDiv = false;
+                    }
                     // console.log('priceDiv',priceDiv)
-                    if (priceDiv[0]) {
-                        var priceFloat = parseFloat(priceDiv[0].innerText.replace(/\/.*|[^0-9,]/g, '').replace(',', '.'));
+
+                    if (priceDiv) {
+                        var priceFloat = parseFloat(priceDiv.innerText.replace(/\/.*|[^0-9,]/g, '').replace(',', '.'));
                         // console.log('priceFloat', priceFloat)
                         var pricePrint = "";
                         var exchangeText = "";
