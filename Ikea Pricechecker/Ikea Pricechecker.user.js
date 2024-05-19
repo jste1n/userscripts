@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ikea Pricechecker
 // @namespace    http://tampermonkey.net/
-// @version      1.2.0
+// @version      1.2.1
 // @description  Vergleicht die Preise auf der österreichischen Ikea Seite mit den Preisen von IKEA SK/IT/CZ/HU/HR
 // @author       JP Stoni
 // @match        https://www.ikea.com/at/*
@@ -27,6 +27,9 @@
 
 
 // DONE
+// 1.2.1
+// fixed wishlist total prices are shown multiple times after switching between in-retail, in-store and back to in-retail.
+// 
 // 1.2.0
 // PRIO-1: if a product contains multiple pieces, script breaks. Also these type of products have multiple "price-module__addons". 
 //      1. need to detect if a product has a "family price"
@@ -303,7 +306,7 @@
     // need to recognize when navigated to a new page and check the script again. wishlist will not work without it. probably because its some sort of a sub singel page.
     window.navigation.addEventListener("navigate", (event) => {
         // checks here too for the favourites url
-        var isFavouritesWishlist = event.destination.url.match(/.*\/favourites\/.+/g);
+        var isFavouritesWishlist = event.destination.url.match(/.*\/favourites\/.+retail$/g);
         // ignore event traverse. when going back in history, both traverse and replace are called.
         if ((event.navigationType == 'push' || event.navigationType == 'replace') && isFavouritesWishlist) {
             favouritesList = isFavouritesWishlist;
@@ -323,6 +326,8 @@
     }
 
     function runFavouritesWebsite() {
+        // remove prices before creating new elements (again)
+        jQuery(".janWishlistBlock").remove();
         counters = [];
         sums = [];
         resetSumValues();
@@ -417,7 +422,7 @@
                 if (counters[country.countryCode] == 0) {
                     // find element which contains the text 'Normalpreis'
                     jQuery('div.PriceSummary_wrapper__B3uv_ > :last-child')
-                        .after('<div style="' + sumPriceCountryContainer + '">\
+                        .after('<div class="janWishlistBlock" style="' + sumPriceCountryContainer + '">\
                     <span>Normalpreis '+ country.name + '</span>\
                     <span>\
                         <span id="priceMissingDisclaimer'+ country.name + '" style="color:red!important; display:none;" class="tooltip">Preis enthält möglicherweise nicht alle Produkte\
